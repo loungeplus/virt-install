@@ -1,0 +1,56 @@
+
+image::2025_spring/conclusion/00_Thank_You.png[link=self, window=blank, width=100%]
+
+{lab_name} を楽しみ、*OpenShift Virtualization* についてさらに詳しく学び、レガシー仮想マシンのインポートと管理の両方に役立つツールであること、またアプリケーションのモダナイゼーションの足がかりとなることを理解していただけたと思います。
+
+[key_takeaways]
+== 主な成果
+
+* OpenShift Virtualization はソリューション志向であり、成熟し、安定しており、拡張性があり、簡単に導入できるソリューションを提供します。
+
+* OpenShift Virtualization は、完全なハイブリッドクラウドアプリケーション開発プラットフォームを提供する OpenShift Platform Plus から、仮想化されたワークロードのサポートに特化したサービスである OpenShift Virtualization Engine まで、Red Hat OpenShift のすべてのサブスクリプションレベルで利用できます。
+
+* OpenShift Virtualization は、パートナー製品からなる幅広いエコシステムと完全に統合されており、日々その数は増え続けています。お好みのハードウェアおよびソフトウェアベンダーが OpenShift Virtualization をサポートしているかどうかを確認してください。
+
+* OpenShift Virtualization は、従来のワークロードのための強固な基盤を設定するのに役立ちます。同時に、最新のアプリケーションプラットフォームで将来のためのスキルを構築します。
+
+
+[additional_info]
+== 追加情報
+
+=== 無料の電子書籍：Red Hat OpenShift Virtualization を採用する15の理由
+
+* 仮想化インフラストラクチャがどのように進化し続けているかをご覧ください。
+* 既存の仮想マシンの移行オプションを検討してください。
+* 組織全体にわたって多数のメリットを活用してください。
+* 革新のための一貫した基盤の展開について学んでください。
+* 無償のデモまたは仮想移行アセスメントを通じて、どのように開始するかを学んでください。
+
+リンク https://www.redhat.com/en/resources/15-reasons-adopt-openshift-virtualization-ebook[ここ^] をクリックするか、以下のQRコードをスキャンして詳細をご覧ください。
+
+image::2025_spring/conclusion/01_Ebook.png[link=self, window=blank, width=50%]
+
+=== Red Hat ラーニングサービス: DO317 Red Hat OpenShift Virtualization による仮想マシンの管理
+
+* OpenShift クラスタ上の VM の作成、アクセス、および管理に必要なスキル。
+* コンテナに対するこれらのリソースの使用とアクセスを制御するのと同じ Kubernetes 機能を使用して、VM から CPU、メモリ、ストレージ、およびネットワークリソースの使用とアクセスを制御するために必要なスキル。
+* OpenShift Virtualizationの標準Kubernetes機能と拡張機能を使用してVMのHA（高可用性）を管理するためのサンプルアーキテクチャ。
+* OpenShift上のVMを、ストレージやデータベースなど、OpenShiftクラスター外のデータセンターサービスに接続するための戦略。
+* Migration Toolkit for VirtualizationのOperatorを使用して、互換性のあるハイパーバイザーからOpenShift VirtualizationにVMを移行するための戦略。
+
+リンク https://www.redhat.com/en/services/training/managing-virtual-machines-red-hat-openshift-virtualization-exam[ここ^]をクリックするか、以下のQRコードをスキャンして詳細をご覧ください。
+
+
+image::2025_spring/conclusion/02_DO317_Training.png[link=self, window=blank, width=50%]
+
+=== Virtualization Migrationアセスメント
+
+* 2週間のオンサイトでのインタラクティブなワークショップとフォローアップレポート。
+* 経験豊富な Red Hat アーキテクトが、マイグレーションの旅を支援するための短期間のオンサイトワークショップを実施します。
+* ネットワーク、ストレージ、セキュリティ、バックアップ、および災害復旧など、仮想化環境と現在の統合に関する広範なレビューを提供します。
+* ハイレベルな推奨事項や設計上の考慮事項を含む、お客様の移行を完全にサポートするカスタマイズされた提案を記載したVMAレポートを受け取ります。
+* これにより、移行の目的、移行方法、所要時間、費用について理解を深めることができます。
+
+詳細については、 https://www.redhat.com/en/resources/virtualization-migration-assessment-datasheet[ここ^] をクリックするか、下記のQRコードをスキャンしてください。
+
+image::2025_spring/conclusion/03_VMA_QR.png[link=self, window=blank, width=50%]
