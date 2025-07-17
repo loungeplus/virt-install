@@ -17,7 +17,7 @@
 
 ## [事前準備](0-prerequisite.md)
 ## [1章. OpenShift Virtualizationのインストール](1-install.md) 
-## [2章. 仮想マシンの作成](2-vm-template.md) 
+## [2章. 仮想マシンの作成](2-vm-create.md) 
 ## [3章. 仮想マシン上のサービスへのアクセス](3-accessvm.md)
 ## [4章. 仮想マシンへのネットワーク追加](4-networking.md) 
 ## [5章. ストレージ](5-storage.md)
