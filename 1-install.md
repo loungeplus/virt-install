@@ -174,21 +174,21 @@ time="2025-07-15T09:32:05Z" level=info msg="Login to the console with user: \"ku
 
 OpenShiftは、デフォルトで自己証明書を使用しているため、ブラウザで上記のURLにアクセスすると、セキュリティ警告の画面が表示されます。
 
-![Console Login1](images/console-login1.png)
+![Console Login1](images/1-install/console-login1.png)
 
-[詳細設定]を押下し、`oauth-openshift.apps....にアクセスする（安全ではありません）`のリンクを開きます。
+`[詳細設定]`を押下し、`oauth-openshift.apps....にアクセスする（安全ではありません）`のリンクを開きます。
 
-![Console Login2](images/console-login2.png)
+![Console Login2](images/1-install/console-login2.png)
 
 すると、ログイン画面に遷移します。
 
-![Console Login3](images/console-login3.png)
+![Console Login3](images/1-install/console-login3.png)
 
-ユーザ名とパスワードの欄に、`openshift-install`コマンドの実行ログに出力されている `console with user: "kubeadmin"`と、 `password: "<Passowrd>" `を入力し、[ログイン]ボタンを押下します。
+ユーザ名とパスワードの欄に、`openshift-install`コマンドの実行ログに出力されている `console with user: "kubeadmin"`と、 `password: "<Passowrd>" `を入力し、`[ログイン]`ボタンを押下します。
 
 以下のように、OpenShiftコンソールが表示されることを確認してください。
 
-![Console Login4](images/console-login4.png)
+![Console Login4](images/1-install/console-login4.png)
 
 ### CLIからのOpenShiftクラスタへのログイン
 インストーラの生成したkubeconfigは権限が多すぎるため、CLIでOpenShiftクラスタを操作する際は、通常、`oc login`コマンドでOpenShiftにログインし、操作します。
@@ -199,21 +199,21 @@ OpenShiftでは、`User`と`Group`の単位で、クラスタへアクセスす�
 また、GUIログイン以降、次の流れで、`oc login`でアクセスするためのテンポラリトークンを払い出すことができます。
 
 
-画面右上の[kube:admin]のメニューをクリックします。
+画面右上の`[kube:admin]`のメニューをクリックします。
 
-![oclogin1](images/oclogin1.png)
+![oclogin1](images/1-install/oclogin1.png)
 
 続いて、「ログインコマンドのコピー」というメニューをクリックします。
-![oclogin2](images/oclogin2.png)
+![oclogin2](images/1-install/oclogin2.png)
 
 
-画面右上の「Display Token」リンクをクリックします。
+画面右上の`[Display Token]`リンクをクリックします。
 
-![oclogin3](images/oclogin3.png)
+![oclogin3](images/1-install/oclogin3.png)
 
 すると、「Log in with this token」という箇所に、`oc login`のコマンドが表示されます。
 
-![oclogin4](images/oclogin4.png)
+![oclogin4](images/1-install/oclogin4.png)
 
 このコマンドをコピーして、踏み台サーバ上で実行してみましょう。
 
@@ -354,67 +354,67 @@ ODFは、rook/cephベースのコンテナストレージです。OpenShift Plat
 
 ### OpenShift Data Foundation Operatorのインストール
 
-[管理者向け表示]の画面で、[Operator]-[OperatorHub]をクリックします。そして、検索ボックスに「OpenShift Data Foundation」と入力してください。
+`[管理者向け表示]`の画面で、`[Operator]` > `[OperatorHub]`をクリックします。そして、検索ボックスに「OpenShift Data Foundation」と入力してください。
 
-![ODF Install1](images/operator-odf-select.png)
+![ODF Install1](images/1-install/operator-odf-select.png)
 
-真ん中の「OpenShift Data Foundation」のタイルをクリックすると、Operatorの紹介画面が表示されます。何も考えず[インストール]ボタンを押下しましょう。
+真ん中の「OpenShift Data Foundation」のタイルをクリックすると、Operatorの紹介画面が表示されます。何も考えず`[インストール]`ボタンを押下しましょう。
 
-![ODF Install2](images/odf-install-page.png)
+![ODF Install2](images/1-install/odf-install-page.png)
 
-続いて、「Operatorのインストール」画面が表示されます。
+続いて、`[Operatorのインストール]`画面が表示されます。
 デフォルトの設定のまま、「インストール」ボタンを押下してください。
 
-![ODF Install3](images/odf-install1.png)
+![ODF Install3](images/1-install/odf-install1.png)
 
-[Operator]-[インストール済みのOperator]画面で、「OpenShift Data Foundation」のステータスが「✅Succeed」であることを確認します。
+`[Operator]` > `[インストール済みのOperator]`画面で、「OpenShift Data Foundation」のステータスが「✅Succeed」であることを確認します。
 
-![ODF Install4](images/operator-installed.png)
+![ODF Install4](images/1-install/operator-installed.png)
 
-[インストール済みのOperator]画面で、[OpenShift Data Foundation]をクリックします。すると、`StorageSystemの作成`というボタンが表示されているはずです。ボタンを押下しましょう。
+`[インストール済みのOperator]`画面で、`[OpenShift Data Foundation]`をクリックします。すると、`StorageSystemの作成`というボタンが表示されているはずです。ボタンを押下しましょう。
 
-![ODF Install5](images/storagesystem1.png)
+![ODF Install5](images/1-install/storagesystem1.png)
 
 ### StorageSystemリソースの作成
 
 以下の画面の通り、設定を選択してStorageSystemを作成してください。
 
 #### 「バッキングストレージ」の設定
-![storagesystem1](images/storagesystem2.png)
+![storagesystem1](images/1-install/storagesystem2.png)
 
 - Deploymentタイプ：完全なデプロイメント
 - バッキングストレージのタイプ：既存のStorageClassの使用
 - ネットワークファイルシステム(NFS)：✅
 - Ceph RBDをデフォルトのStorageClassとして使用する：✅
 
-[次へ]ボタンを押下
+`[次へ]`ボタンを押下
 
 #### 「容量およびノード」の設定
-![storagesystem2](images/storagesystem3.png) 
+![storagesystem2](images/1-install/storagesystem3.png) 
 
 - 要求された容量：2TB
 - ノードの選択：すべてのノードを✅
 
-[次へ]ボタンを押下
+`[次へ]`ボタンを押下
 
 #### 「セキュリティおよびネットワーク」の設定
 
-デフォルトのまま[次へ]
+デフォルトのまま`[次へ]`
 
-![storagesystem3](images/storagesystem4.png) 
+![storagesystem3](images/1-install/storagesystem4.png) 
 
 #### 確認および作成
 
-[StorageSystemの作成]ボタンを押下
-![storagesystem4](images/storagesystem5.png)
+`[StorageSystemの作成]`ボタンを押下
+![storagesystem4](images/1-install/storagesystem5.png)
 
 ODFのインストールには十分程度時間がかかるため、次のステップへ進んでください。
 
-> Note. インストール中に、画面のリロードを求められますので、リロードしてください。ODFがインストールされると、OpenShiftコンソールの[ストレージ]メニューに、ODFのメニューが追加されます。
+> Note. インストール中に、画面のリロードを求められますので、リロードしてください。ODFがインストールされると、OpenShiftコンソールの`[ストレージ]`メニューに、ODFのメニューが追加されます。
 
-なお、[インストール済みのOperator]-[OpenShift Data Foundation]-[StorageSystem]-[ocs-storagecluster-storagesystem]のページの一番下が、以下の状態となれば、正常にODFがインストールされています。
+なお、`[インストール済みのOperator]` > `[OpenShift Data Foundation]` > `[StorageSystem]` > `[ocs-storagecluster-storagesystem]`のページの一番下が、以下の状態となれば、正常にODFがインストールされています。
 
-![storagesystem5](images/odf-installed-check.png)
+![storagesystem5](images/1-install/odf-installed-check.png)
 
 念の為、Podの状態が以下の通りになることも確認しておきましょう！
 
@@ -483,56 +483,56 @@ ux-backend-server-68b88df999-bb9mv                                2/2     Runnin
 
 以下の手順で、デフォルトのStorageClassを、ODFに変更しましょう。
 
-[ストレージ]-[StorageClass]を開きます。
+`[ストレージ]` > `[StorageClass]`を開きます。
 
-![storageclass1](images/storageclass1.png)
+![storageclass1](images/1-install/storageclass1.png)
 
-[gp3-csi]をクリックし、[YAML]ビューへ切り替えます。
-そして、以下の箇所を削除して、[保存]ボタンを押下します。
-![storageclass2](images/storageclass2.png)
+`[gp3-csi]`をクリックし、`[YAML]`ビューへ切り替えます。
+そして、以下の箇所を削除して、`[保存]`ボタンを押下します。
+![storageclass2](images/1-install/storageclass2.png)
 
 ```
   annotations:
     storageclass.kubernetes.io/is-default-class: 'true'
 ```
 
-再度、[StorageClass]を開き、`gp3-csi`の横の「デフォルト」という文字列が消えていることを確認します。
+再度、`[StorageClass]`を開き、`gp3-csi`の横の「デフォルト」という文字列が消えていることを確認します。
 
-![storageclass3](images/storageclass3.png)
+![storageclass3](images/1-install/storageclass3.png)
 
 ## OpenShift Virtualizationのインストール
 
 いよいよ本題のOpenShift Virtualizationのインストールに進みましょう！
 
 ### OpenShift Virtualization Operatorのインストール
-[Operator]-[OperatorHub]を開き、検索ボックスへ「OpenShift Virtualization」と入力します。
+`[Operator]` > `[OperatorHub]`を開き、検索ボックスへ「OpenShift Virtualization」と入力します。
 
-そして、[OpenShift Virtualization]タイルをクリックしてください。
+そして、`[OpenShift Virtualization]`タイルをクリックしてください。
 
-![virtinstall1](images/operator-openshift-virt-select.png)
+![virtinstall1](images/1-install/operator-openshift-virt-select.png)
 
-ODFの時と同様、Operatorの紹介画面が開きます。何も考えず[インストール]ボタンを押下します。
+ODFの時と同様、Operatorの紹介画面が開きます。何も考えず`[インストール]`ボタンを押下します。
 
-![virtinstall2](images/virt-install-page.png)
+![virtinstall2](images/1-install/virt-install-page.png)
 
-続いて、[Operatorのインストール]画面へ遷移しますので、[インストール]ボタンを押下してください。
+続いて、`[Operatorのインストール]`画面へ遷移しますので、`[インストール]`ボタンを押下してください。
 
-![virtinstall3](images/virt-install1.png)
+![virtinstall3](images/1-install/virt-install1.png)
 
-[インストール済みのOperator]画面で、「OpenShift Virtualization」をクリックします。
+`[インストール済みのOperator]`画面で、「OpenShift Virtualization」をクリックします。
 
-![virtinstall3](images/operator-installed.png)
+![virtinstall3](images/1-install/operator-installed.png)
 
-すると、[HyperConvergedの作成]ボタンが表示されているはずです。
-ボタンをクリックし、デフォルトの設定のまま「作成」ボタンを押下してください。
+すると、`[HyperConvergedの作成]`ボタンが表示されているはずです。
+ボタンをクリックし、デフォルトの設定のまま`[作成]`ボタンを押下してください。
 
-![virtinstall4](images/hyperconverged.png)
+![virtinstall4](images/1-install/hyperconverged.png)
 
-> Note. インストール中に、画面のリロードを求められますので、リロードしてください。OpenShift Virtualizationがインストールされると、OpenShiftコンソールの[管理者向け表示]のメニューに、[Virtualization]というOpenShift Virtualizationのメニューが追加されます。
+> Note. インストール中に、画面のリロードを求められますので、リロードしてください。OpenShift Virtualizationがインストールされると、OpenShiftコンソールの`[管理者向け表示]`のメニューに、`[Virtualization]`というOpenShift Virtualizationのメニューが追加されます。
 
-なお、[インストール済みのOperator]-[OpenShift Virtualization]-[OpenShift Virtualization Deloyment]-[kubevirt-hyperconverged]のページの一番下が、以下の状態となれば、正常にインストールされています。
+なお、`[インストール済みのOperator]` > `[OpenShift Virtualization]` > `[OpenShift Virtualization Deloyment]` > `[kubevirt-hyperconverged]`のページの一番下が、以下の状態となれば、正常にインストールされています。
 
-![virtinstall5](images/virt-installed-check.png)
+![virtinstall5](images/1-install/virt-installed-check.png)
 
 また、念の為、CLIでPodの状態が以下の通りであることを確認しましょう。
 

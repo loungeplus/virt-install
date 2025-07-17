@@ -1,73 +1,85 @@
-= テンプレートとインスタンスタイプの管理
+# テンプレートとインスタンスタイプの管理
 
-== はじめに
+## はじめに
 
-事前設定済みの Red Hat 仮想マシンテンプレートは、*Virtualization*  ページ以下の *Templates* にリストされています。これらのテンプレートは、Red Hat Enterprise Linux、Fedora、CentOS、Microsoft Windows Desktop、および Microsoft Windows Server の異なるバージョンで利用可能です。各 Red Hat 関連の仮想マシンテンプレートは、オペレーティングシステムのイメージ（起動ソース）、オペレーティングシステムのデフォルト設定、フレーバー（CPUとメモリ）、およびワークロードタイプ（サーバー）が事前に設定されています。その他のオペレーティングシステム用のテンプレートには OS イメージは含まれていませんが、そのオペレーティングシステム用に推奨される設定が事前に設定されています。
+OpenShift Virtualization では、あらかじめ設定済みの仮想マシンテンプレートが `[Virtualization]` > `[Templates]` ページに一覧表示されます。これらは Red Hat Enterprise Linux、Fedora、CentOS、Microsoft Windows などのOSごとに用意されています。
 
-*Templates* ページには、以下の4種類の仮想マシンテンプレートが表示されます:
+Red Hat 提供のテンプレートには以下が含まれています：
+- OSイメージ（起動元）
+- OSの初期設定
+- CPU/メモリの構成（フレーバー）
+- ワークロードタイプ（例：サーバー）
 
-* *Red Hat Supported* のテンプレートは、Red Hat により完全にサポートされています。
-* *User Supported* のテンプレートは、Red Hat サポート対象のテンプレートをユーザーが複製して作成したものです。
-* *Red Hat Provided* のテンプレートは、Red Hat によるサポートが限定的です。
-* *User Provided* のテンプレートは、 *Red Hat Provided* テンプレートをユーザーが複製して作成したものです。
+その他のOS用テンプレートにはOSイメージは含まれませんが、推奨される構成がセット済みです。
 
-[[prepare_templates_lab]]
-== ラボの準備
+### テンプレートの種類
 
-. これから実行する作業では、いくつかの追加のVMをプロビジョニングする必要があります。準備として、共有環境がラボを完了するのに十分なリソースを確保できるよう、既存の *fedora01* および *fedora02* 仮想マシンをシャットダウンしてください。
+テンプレートには以下の4種類があります。
 
-. 左側のメニューで *Virtualization* パースペクティブに移動し、*Virtualmachines* をクリックします。
-. VMワークロードをホストしている、アクセス可能な各プロジェクトが中央列のツリービューに表示されます。（少なくとも、プロジェクト *vmimported-{user}* と *vmexamples-{user}* を展開して、仮想マシンのステータスを確認してください。
-. VMのステータスが *Running* と表示されている場合は、中央のツリー列でVMをハイライトし、 *Actions* ドロップダウンメニューから *Stop* ボタンまたはオプションを選択します。
+| 種類 | 説明 |
+|------|------|
+| **Red Hat Supported** | Red Hat が完全サポートするテンプレート |
+| **User Supported** | Red Hat のテンプレートをユーザーが複製して作成したもの |
+| **Red Hat Provided** | Red Hat が限定的に提供するテンプレート |
+| **User Provided** | Red Hat Provided をユーザーが複製したもの |
 
-これで、すべてのVMが *Stopped* 状態になります。
 
-image::2025_spring/module-07-tempinst/00_VMs_Stopped.png[link=self, window=blank, width=100%]
+## 準備
 
-[[clone_customize_template]]
-== テンプレートの複製とカスタマイズ
+1. 左メニューから `[Virtualization]` > `[VirtualMachines]` を開きます。
+2. `handson` プロジェクトを展開します。
+3. Running 状態のVMがあれば、選択して `[Actions]` > `[Stop]` をクリックしてください。
 
-デフォルトでは、Red Hat OpenShift Virtualization が提供する事前構成済みのテンプレートはカスタマイズできません。ただし、テンプレートを複製して、特定のワークロードに合わせて調整し、特定のワークロード用の特定のタイプの仮想マシンを簡単に要求できるようにすることは可能です。このラボのこのセクションでは、まさにこの作業を行います。エンドユーザーにオンデマンドで事前構成済みのデータベースサーバーを提供するテンプレートを作成します。
+![vmstop](images/3-vm-template/00_VMs_Stopped.png)
 
-. まず、左側のメニューで *Templates* をクリックし、プロジェクトとして *openshift* を選択します。*openshift* プロジェクトを表示するには、*Show default projects* ボタンを切り替える必要があるかもしれません。
-+
-image::2025_spring/module-07-tempinst/01_Project_Toggle.png[link=self, window=blank, width=100%]
-+
-image::2025_spring/module-07-tempinst/01_Template_List.png[link=self, window=blank, width=100%]
+## テンプレートの複製とカスタマイズ
 
-. 検索バーに *centos9* と入力し、Enterキーを押します。表示されるテンプレートリストから、*centos-stream9-server-small* のテンプレートを見つけます。
-+
-image::2025_spring/module-07-tempinst/02_Search_Centos9.png[link=self, window=blank, width=100%]
+### プロジェクトを選択
+左メニューから *Templates* をクリックし、プロジェクトとして `openshift` を選択してください。
 
-. *centos-stream9-server-small* のテンプレート名をクリックすると、デフォルトのテンプレートは編集できない旨のメッセージが表示され、クローンを作成するか尋ねられます。*Create a new custom Template* オプションをクリックします。
-+
-image::2025_spring/module-07-tempinst/03_Create_Custom_Template.png[link=self, window=blank, width=100%]
+   - 必要に応じて *Show default projects* を有効化します。
+   - *openshift* プロジェクトを表示するには、*Show default projects* ボタンを切り替える必要があるかもしれません。
 
-. *Clone template* という新しいメニューが表示されます。以下の値を入力し、完了したら *Clone* ボタンをクリックします。
-+
-* *Template name:* centos-stream9-server-db-small
-* *Template project:* vmexamples-{user}
-* *Template display name:* CentOS Stream 9 VM - Database Template Small
-* *Template provider:* Roadshow {user}
-+
-image::2025_spring/module-07-tempinst/04_Clone_Template_Options.png[link=self, window=blank, width=100%\]
+![alt text](images/3-vm-template/01_Project_Toggle.png)
 
-. これにより、テンプレートの *Details* ページに移動し、いくつかのオプションをカスタマイズできるようになります。まず、ページの下部付近にあるCPUとメモリを見つけ、鉛筆アイコンをクリックして編集します。
-+
-image::2025_spring/module-07-tempinst/05_Clone_Details.png[link=self, window=blank, width=100%\]
+### centos9のテンプレートを検索
 
-. 新しいウィンドウが開き、CPUとメモリの量を編集できます。カスタムテンプレートでは、CPUの値を2、メモリの値を4 GiBに設定し、*Save* ボタンをクリックします。
-+
-image::2025_spring/module-07-tempinst/06_Edit_CPU_Mem.png[link=self, window=blank, width=100%]
+検索バーで `centos9` を検索し、`centos-stream9-server-small` を見つけます。
 
-. 次に、画面上部の *Scripts* タブをクリックし、 *Cloud-init* セクションで *Edit* ボタンをクリックします。
-+
-image::2025_spring/module-07-tempinst/09_Scripts_CloudInit.png[link=self, window=blank, width=100%]
+![alt text](images/3-vm-template/02_Search_Centos9.png)
 
-.  *Cloud-init* ダイアログが開いたら、*Configure via: Script* のラジオボタンをクリックし、以下の YAML スニペットで YAML を置き換えます。
-+
-[source,yaml,role=execute]
-----
+### カスタムテンプレートの作成
+テンプレート名をクリックし、**Create a new custom Template** を選択します。
+
+![alt text](images/3-vm-template/03_Create_Custom_Template.png)
+
+`Clone template` 画面で以下を入力してください。
+- Template name: `centos-stream9-server-db-small`
+- Project: `vmexamples-{user}`
+- Display name: `CentOS Stream 9 VM - Database Template Small`
+- Provider: `Roadshow {user}`
+
+![alt text](images/3-vm-template/04_Clone_Template_Options.png) 
+
+### CPUとメモリを編集
+CPU と メモリを、CPU: 2, Memory: 4GiB　へ修正します。
+
+`[Details]`タブをクリックし、詳細画面を表示します。
+![alt text](images/3-vm-template/05_Clone_Details.png)
+
+そして、`CPU|Memory`の箇所の鉛筆マークをクリックしてください。
+
+![alt text](images/3-vm-template/06_Edit_CPU_Mem.png)
+
+### Cloud-initの編集
+
+`[Scripts]`タブ > `[Cloud-init]` > `[Edit]` をクリックします。
+
+![alt text](images/3-vm-template/09_Scripts_CloudInit.png)
+
+`[Cloud-init]`ダイアログが開いたら、*Configure via: Script* のラジオボタンをクリックし、以下の YAML スニペットで YAML を置き換えます。
+
+```
 userData: |-
   #cloud-config
   user: centos
@@ -78,94 +90,115 @@ userData: |-
   runcmd:
     - systemctl enable mariadb
     - systemctl start mariadb
-----
-+
-image::2025_spring/module-07-tempinst/10_Cloud_Init_Script.png[link=self, window=blank, width=100%]
+```
 
-.  *Save* ボタンをクリックすると、*Saved* という緑色のプロンプトが表示されます。次に、*Apply* ボタンをクリックします。
+![alt text](images/3-vm-template/10_Cloud_Init_Script.png)
 
-. 次に、左側のメニューにある *Catalog* 項目をクリックし、 *Template catalog* オプションを選択し、さらに *User templates* を選択します。作成したテンプレートがタイルとして利用可能になっているはずです。
-+
-image::2025_spring/module-07-tempinst/11_User_Templates.png[link=self, window=blank, width=100%]
+`[Save]`ボタンをクリックすると、*Saved* という緑色のプロンプトが表示されます。その後、*Apply* ボタンをクリックします。
 
-.  タイルをクリックすると、VMの起動画面が表示されます。 *Quick create VirtualMachine*（仮想マシンのクイック作成）ボタンをクリックします。
-+
-image::2025_spring/module-07-tempinst/12_Quick_Create_Template.png[link=self, window=blank, width=100%]
+### カタログからテンプレートを選択
+左側のメニューにある `[Catalog]` をクリックし、 `[Template catalog]` オプションを選択してください。
 
-. 仮想マシンが起動すると、*Overview* ページに、テンプレートから作成され、定義した追加リソースが含まれていることが表示されます。あとは、*MariaDB* がインストールされていることを確認するだけです。
-+
-image::2025_spring/module-07-tempinst/13_VM_From_Template.png[link=self, window=blank, width=100%]
+そして、`[User templates]` を選択します。
+すると、作成したテンプレートがタイルとして利用可能になっているはずです。
 
-. 上部にある *Console* タブをクリックし、提供された *Guest login credentials* と *Copy* および *Paste to console* ボタンを使用して、仮想マシンのコンソールにログインします。
-+
-image::2025_spring/module-07-tempinst/14_VM_Console.png[link=self, window=blank, width=100%]
+![alt text](images/3-vm-template/11_User_Templates.png)
 
-. 仮想マシンにログインしたら、次のコマンドを実行してMariaDBのインストールをテストします。
-+
-[source,sh,role=execute]
-----
+
+### テンプレートを使用した仮想マシンの作成
+
+タイルをクリックすると、VMの起動画面が表示されます。 `[Quick create VirtualMachine]`（仮想マシンのクイック作成）ボタンをクリックします。
+
+![alt text](images/3-vm-template/12_Quick_Create_Template.png)
+
+
+仮想マシンが起動すると、`[Overview]` ページに、テンプレートから作成され、定義した追加リソースが含まれていることがわかります。
+
+![alt text](images/3-vm-template/13_VM_From_Template.png)
+
+このテンプレートには、`MariaDB`が含まれています。確認してみましょう。
+
+### MariaDBへの接続確認
+上部にある `[Console]` タブをクリックします。
+提供された *Guest login credentials* と *Copy* および *Paste to console* ボタンを使用して、仮想マシンのコンソールにログインします。
+
+![alt text](images/3-vm-template/14_VM_Console.png)
+
+仮想マシンにログインしたら、次のコマンドを実行してMariaDBのインストールをテストします。
+
+```
 sudo mysql -u root
-----
-+
-image::2025_spring/module-07-tempinst/15_MariaDB_Login.png[link=self, window=blank, width=100%]
+```
 
-. VMからログアウトするには、*Ctrl-D* を2回押します。
+![alt text](images/3-vm-template/15_MariaDB_Login.png)
 
-[[create_win]]
-== Windows VMテンプレートの作成
+VMからログアウトするには、*Ctrl-D* を2回押します。
 
-このラボのセグメントでは、WebサーバーにホストされているISOを使用してMicrosoft Windows Server 2019をインストールします。これは、Webサーバー、オブジェクトストレージ、またはクラスター内の他の永続ボリュームなど、多くの場所からディスクをソースする機能を活用して仮想マシンにオペレーティングシステムをインストールする1つの方法です。
 
-このプロセスは、sysprep済みの仮想マシンからクローンルートディスクを作成し、他のテンプレートで使用することで、オペレーティングシステムの初期インストール後に簡素化することができます。
+## Windows VMテンプレートの作成
 
-NOTE: テンプレートとして使用するゲストオペレーティングシステムの準備プロセスは、状況によって異なります。テンプレートOSの準備の際には、必ず組織のガイドラインと要件に従ってください。
+続いて、Webサーバー上に提供されているISOを使用して、Microsoft Windows Server 2019をインストールしてみましょう。
 
-. 左側のメニューから *Catalog* に移動し、上部の *Template catalog* タブをクリックします。
+本ハンズオンでは、sysprep済みの仮想マシンからクローンルートディスクを作成し、他のテンプレートで使用することで、OSの初期インストールを簡素化することができます。
 
-. 検索バーに *win* と入力するか、または *Microsoft Windows Server 2019 VM* のタイルが見つかるまで下にスクロールします。
-+
-image::2025_spring/module-07-tempinst/16_Windows_2k19_Tile.png[link=self, window=blank, width=100%]
+> NOTE. テンプレートとして使用するゲストOSの準備プロセスは、状況によって異なります。テンプレートOSの準備の際には、必ず組織のガイドラインと要件に従ってください。
 
-. テンプレートに関連するデフォルト構成を示すダイアログが表示されます。
-+
-NOTE: ブートソースが提供されていないため、このVMを素早く作成するオプションが初期状態では表示されないことに注意してください。VMをニーズに合わせてカスタマイズする必要があります。
-+
-image::2025_spring/module-07-tempinst/17_Windows_2k19_Dialog.png[link=self, window=blank, width=100%]
-+
-. ダイアログで以下を入力します：
-* *win-sysprep* という名前を指定します。
-* *Boot from CD* のチェックボックスをオンにします。
-* ドロップダウンメニューから *(creates PVC)* URLを選択します。
-* *image URL* を指定します : https://catalog-item-assets.s3.us-east-2.amazonaws.com/qcow_images/Windows2019.iso
-* CDディスクのサイズを *5 GiB* に縮小します。
-* *Disk source* は *Blank* のままにし、サイズはデフォルト値の *60 GiB* に設定します
-* *Mount Windows drivers dis* チェックボックスが有効になっていることを確認します。 **これは、VirtIO用のドライバを提供するWindowsシステムをインストールするために必要です。**
-+
+### テンプレートの選択
+左側のメニューから `[Catalog]` に移動し、上部の `[Template catalog]` タブをクリックします。
 
-. オプションを入力したら、テンプレートの設定を続けるために、下部の *Customize VirtualMachine* ボタンをクリックします。
-+
-image::2025_spring/module-07-tempinst/18_Windows_2k19_Parameters.png[link=self, window=blank, width=100%]
+検索バーに *win* と入力するか、または *Microsoft Windows Server 2019 VM* のタイルが見つかるまで下にスクロールします。
 
-. *Customize and create VirtualMachine* 画面で、*Boot mode* オプションの横にある編集用鉛筆アイコンをクリックします。 
-+
-image::2025_spring/module-07-tempinst/19_Boot_Mode.png[link=self, window=blank, width=100%]
+![alt text](images/3-vm-template/16_Windows_2k19_Tile.png)
 
-. *Boot mode* メニューが表示されたら、ドロップダウンメニューから *BIOS* ブートモードを選択し、 *Save* ボタンをクリックします。
-+
-image::2025_spring/module-07-tempinst/19a_Boot_BIOS.png[link=self, window=blank, width=100%]
+テンプレートに関連するデフォルト構成を示すダイアログが表示されます。
 
-. 次に、 *Scripts* タブをクリックし、 *Sysprep* セクションまでスクロールダウンして、 *Edit* ボタンをクリックします。
-+
-image::2025_spring/module-07-tempinst/20_Customize_Scripts.png[link=self, window=blank, width=100%]
+> NOTE. ブートソースが提供されていないため、このVMを素早く作成するオプションが初期状態では表示されません。VMをニーズに合わせてカスタマイズする必要があります。
 
-. 新しいウィンドウがポップアップし、新しいテンプレート用の *Sysprep* アクションを作成できます。
-+
-image::2025_spring/module-07-tempinst/21_Sysprep.png[link=self, window=blank, width=100%]
+![alt text](images/3-vm-template/17_Windows_2k19_Dialog.png)
 
-. 次のコードブロックを *autounattend.xml* セクションにコピーして貼り付けます。
-+
-[source,xml,role=execute]
-----
+### 必要情報の入力
+ダイアログで以下を入力します
+
+- *win-sysprep* という名前を指定します。
+
+- *Boot from CD* のチェックボックスをオンにします。
+
+- ドロップダウンメニューから *(creates PVC)* URLを選択します。
+
+- *image URL* を指定します : https://catalog-item-assets.s3.us-east-2.amazonaws.com/qcow_images/Windows2019.iso
+
+- CDディスクのサイズを *5 GiB* に縮小します。
+
+- *Disk source* は *Blank* のままにし、サイズはデフォルト値の *60 GiB* に設定します
+
+- *Mount Windows drivers dis* チェックボックスが有効になっていることを確認します。 **これは、VirtIO用のドライバを提供するWindowsシステムをインストールするために必要です。**
+
+
+オプションを入力したら、テンプレートの設定を続けるために、下部の `[Customize VirtualMachine]` ボタンをクリックします。
+
+![alt text](images/3-vm-template/18_Windows_2k19_Parameters.png)
+
+### Boot Modeの変更
+`[Customize and create VirtualMachine]` 画面で、`[Boot mode]` オプションの横にある編集用鉛筆アイコンをクリックします。 
+
+![alt text](images/3-vm-template/19_Boot_Mode.png)
+
+`[Boot mode]` メニューが表示されたら、ドロップダウンメニューから `BIOSを選択し、 `[Save]` ボタンをクリックします。
+
+![alt text](images/3-vm-template/19_Boot_Mode.png)
+
+### Sysprepを修正
+`[Scripts]` タブをクリックし、 *Sysprep* セクションまでスクロールダウンし、 `[Edit]` ボタンをクリックします。
+
+![alt text](images/3-vm-template/20_Customize_Scripts.png)
+
+新しいウィンドウがポップアップし、新しいテンプレート用の *Sysprep* アクションを作成できます。
+
+![alt text](images/3-vm-template/21_Sysprep.png)
+
+次のコードブロックを *autounattend.xml* セクションにコピーして貼り付けます。
+
+```
 <?xml version="1.0" encoding="utf-8"?>
 <unattend xmlns="urn:schemas-microsoft-com:unattend" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:schemas-microsoft-com:unattend">
   <settings pass="windowsPE">
@@ -301,117 +334,88 @@ image::2025_spring/module-07-tempinst/21_Sysprep.png[link=self, window=blank, wi
     </component>
   </settings>
 </unattend>
-----
+```
 
-. コードを貼り付けたら、ダイアログの *Save* ボタンをクリックします。
-+
-image::2025_spring/module-07-tempinst/22_Windows_2k19_Sysprep.png[link=self, window=blank, width=100%]
+コードを貼り付けたら、ダイアログの `[Save]` ボタンをクリックします。
 
-. Sysprepが完了したら、画面の下部にある *Create VirtualMachine* ボタンをクリックします。
-+
-image::2025_spring/module-07-tempinst/23_Create_VirtualMachine.png[link=self, window=blank, width=100%]
+![alt text](images/3-vm-template/22_Windows_2k19_Sysprep.png)
 
-. 仮想マシンは、ISOイメージをダウンロードし、設定を行い、インスタンスを起動することで、プロビジョニングプロセスを開始します。
-+
-image::2025_spring/module-07-tempinst/24_Windows_2k19_Provisioning.png[link=self, window=blank, width=100%]
+### 仮想マシンの作成
+画面の下部にある `[Create VirtualMachine]` ボタンをクリックします。
 
-. このプロセスは、起動 ISO イメージのダウンロードが必要なため、数分かかる場合があります。 *Diagnostics* タブをクリックすると、ダウンロードの進行状況を確認できます。
-+
-image::2025_spring/module-07-tempinst/25_CD_Import.png[link=self, window=blank, width=100%]
+![alt text](images/3-vm-template/23_Create_VirtualMachine.png)
 
-. しばらくすると仮想マシンが起動し、ステータスが *Running* に変わります。 *Console* タブをクリックして、自動応答のインストールプロセスを表示します。
-+
-image::2025_spring/module-07-tempinst/26_Windows_2k19_Console.png[link=self, window=blank, width=100%]
+仮想マシンは、指定されたURLからISOイメージをダウンロードし、設定を行い、プロビジョニングされます。
 
-. VMのインストールプロセスが完了したら（プロビジョニングには3～5分、起動と設定には約10分かかります）、停止ボタンで電源をオフにします。
-+
-image::2025_spring/module-07-tempinst/27_Stop_Button.png[link=self, window=blank, width=100%]
+![alt text](images/3-vm-template/24_Windows_2k19_Provisioning.png)
 
-. マシンをシャットダウンしたら、今後Windowsテンプレートベースのインストールを行う際に毎回カスタマイズプロセスを実行することなく使用できるルートボリュームのクローンを作成します。
+本ハンズオンでは、起動用のISOイメージのダウンロードが必要なため、数分かかる場合があります。 `Diagnostics` タブをクリックすると、ダウンロードの進行状況を確認できます。
 
-. 左側のメニューで *Storage* をクリックし、次に *PersistentVolumeClaims* をクリックすると、*vmexamples-{user}* ネームスペースで利用可能な PVC のリストが表示されます。
+![alt text](images/3-vm-template/25_CD_Import.png)
 
-. インストールで作成された *win-sysprep* PVC を見つけ、右側の3点メニューから *Clone PVC* を選択します。
-+
-image::2025_spring/module-07-tempinst/28_Storage_PVC.png[link=self, window=blank, width=100%]
+しばらくすると仮想マシンが起動し、ステータスが `Running` に変わります。 `[Console]`タブをクリックし、自動応答のインストールプロセスを表示します。
 
-. ポップアップメニューで以下のオプションを入力し、*Clone*（クローン）ボタンをクリックします。
-* *Name*: windows-2k19-sysprep-template
-* *Access mode*:  Shared access (RWX) 
-* *StorageClass*: ocs-external-storagecluster-ceph-rbd-immediate 
-+
-image::2025_spring/module-07-tempinst/29_Clone_Menu.png[link=self, window=blank, width=100%]
+![alt text](images/3-vm-template/26_Windows_2k19_Console.png)
 
-. これを保存すると、今後Windows VMを素早く作成する際に使用できます。
+VMのインストールプロセスが完了したら（プロビジョニングには3～5分、起動と設定には約10分かかります）、`[停止]`ボタンで電源をオフにします。
 
-.  *Catalog* メニュー項目に戻り、*Disk source* として *PVC (clone PVC)* オプションを選択し、*PVC name* として *Windows-2k19-Sysprep-Template* PVCを選択して、クローンを作成します。*Customize VirtualMachine* ボタンをクリックして、ブートモードを *UEFI* ではなく *BIOS* に設定します。
-+
-image::2025_spring/module-07-tempinst/30_Windows_Template.png[link=self, window=blank, width=100%]
+![alt text](images/3-vm-template/27_Stop_Button.png)
 
-. BIOSを設定し、*Create VirtualMachine*（仮想マシンの作成）をクリックします。
-+
-image::2025_spring/module-07-tempinst/31_Windows_Template_BIOS.png[link=self, window=blank, width=100%]
+### ルートボリュームのクローンを作成
 
-. しばらくすると、新しい Windows Server 2019 仮想マシンがクローン作成された PVC から起動します。
-+
-image::2025_spring/module-07-tempinst/32_Windows_Template_Running.png[link=self, window=blank, width=100%]
+VMを停止したら、今後、Windowsテンプレートによるインストールを行う際に、毎回カスタマイズプロセスを実行することなく使用できるルートボリュームのクローンを作成します。
 
-[[instance_types]]
-== インスタンスタイプの紹介
+左側のメニューで `[Storage]` をクリックし、次に `[PersistentVolumeClaims]` をクリックすると、`handson` ネームスペースで利用可能な PVC のリストが表示されます。
 
-仮想マシンのデプロイプロセスを簡素化するために、OpenShift 4.14 からデフォルトの構成メカニズムが変更され、*インスタンスタイプ* の使用が強調されるようになりました。インスタンスタイプは、新しいVMに適用するリソースと特性を定義できる再利用可能なオブジェクトです。独自のVMをプロビジョニングする際に、OpenShift Virtualizationをインストールすると、カスタムインスタンスタイプを定義したり、さまざまなインスタンスタイプを使用したりできます。これは、一般的なクラウドプロバイダーのセルフサービスカタログを使用する際にユーザーが経験することに非常に似ています。
+インストールで作成された `win-sysprep` PVC を見つけ、右側の3点メニューから `[Clone PVC]` を選択します。
 
-. このセクションでは、インスタンスタイプを使用してVMをプロビジョニングする方法を説明します。
+![alt text](images/3-vm-template/28_Storage_PVC.png)
 
-. まず、左側のメニューで *Catalog* をクリックします。 デフォルトのカタログ項目として *Instance Types* が表示されます。
-+
-image::2025_spring/module-07-tempinst/33_Left_Menu_Catalog.png[link=self, window=blank, width=100%]
+ポップアップメニューで以下のオプションを入力し、*Clone*（クローン）ボタンをクリックします。
+- *Name*: windows-2k19-sysprep-template
+- *Access mode*:  Shared access (RWX) 
+- *StorageClass*: ocs-external-storagecluster-ceph-rbd-immediate 
 
-. インスタンスタイプを使用する最初のステップは、起動するボリュームを選択することです。起動ソースを提供するテンプレートと同様に、これらの起動ソースは、InstanceTypeでプロビジョニングされたゲストで使用できます。*openshift-virtualization-os-images* プロジェクトを選択すると、含まれるボリュームを確認できます。または、*Add volume* ボタンを使用して独自のボリュームをアップロードすることもできます。
-+
-image::2025_spring/module-07-tempinst/34_Volume_Boot.png[link=self, window=blank, width=100%]
-
-. *rhel9* ブートボリュームをクリックして、起動するボリュームタイプとして選択します。 選択すると、イメージ名の左側に小さな青い縦線が表示され、名前自体が太字に変わります。
-+
-image::2025_spring/module-07-tempinst/35_Select_RHEL9.png[link=self, window=blank, width=100%]
-
-. 次に、使用するインスタンスタイプを選択できます。デフォルトで Red Hat が提供するインスタンスタイプが用意されていますが、独自のインスタンスタイプを作成して特定の用途に使用することもできます。提供されているインスタンスタイプにカーソルを合わせると、その使用目的の説明が表示されます。
-+
-image::2025_spring/module-07-tempinst/36_Select_InstanceType.png[link=self, window=blank, width=100%]
-+
-* Red Hat が提供するインスタンスタイプは、以下の用途を想定しています。
-** *Nシリーズ*: VNFs のようなネットワーク集約的な DPDK ワークロード用に設計されています。
-** *Oシリーズ*：メモリオーバーコミットが事前構成された、特殊な汎用インスタンスタイプです。
-** *CXシリーズ*：追加の専用CPUをリクエストすることで、追加の機能オフロードによる計算集約型ワークロード向けに設計されています。
-** *Uシリーズ*：最も汎用性の高い、または「ユニバーサル」なインスタンスタイプです。
-** *Mシリーズ*：メモリ集約型ワークロード向けに設計されています。
-
-. *Uシリーズ* のタイルをクリックすると、一般的なインスタンスタイプの定義済みリソースのドロップダウンリストが表示されます。 デフォルトのオプションは *medium: 1 CPUs, 4 GiB Memory* です。これを選択します。 選択すると、インスタンスタイプのフォントが青字で太字表示されます。
-+
-image::2025_spring/module-07-tempinst/37_InstanceType_Resources.png[link=self, window=blank, width=100%]
-
-. インスタンスタイプを使用してプロビジョニングを行う際に最後に完了させる必要があるセクションは、テンプレートセクションと類似しています。仮想マシンに名前を付け、バックアップディスクに使用するストレージクラスを選択する必要があります。デフォルトでは、VMに名前が生成され、デフォルトのストレージクラスが選択されます。問題がなければ、*Create VirtualMachine* ボタンをクリックします。
-+
-image::2025_spring/module-07-tempinst/38_VM_Details.png[link=self, window=blank, width=100%]
-
-. 仮想マシンの概要ページに移動し、インスタンスタイプを使用してプロビジョニングされたVMが起動して実行中になっていることを確認します。
-+
-image::2025_spring/module-07-tempinst/39_VM_Overview.png[link=self, window=blank, width=100%]
-
-[[cleanup]]
-== クリーンアップ
-
-次のラボでリソースを節約するには、このモジュールで作成したVMをすべて停止してください。
-
-. 左側のメニューで *Virtualization* パースペクティブに移動し、*Virtualmachines* をクリックします。
-. VMワークロードをホストしている、アクセス可能な各プロジェクトが、中央列のツリービューに表示されます。（最低限、プロジェクト *vmimported-{user}* および *vmexamples-{user}* を展開して、仮想マシンのステータスを確認してください。
-. VMのステータスが *Running* となっているものがあれば、中央のツリー列でVMをハイライト表示し、 *Actions* ドロップダウンメニューから *Stop* ボタンまたはオプションを選択します。
-
-これで、すべてのVMが *Stopped* 状態になっているはずです。
-
-image::2025_spring/module-07-tempinst/40_All_Stopped.png[link=self, window=blank, width=100%]
+![alt text](images/3-vm-template/29_Clone_Menu.png)
 
 
-== まとめ
+保存すると、今後Windows VMを素早く作成する際に使用できます。
 
-このセクションでは、データベースなどの特定のワークロードで使用できるテンプレートを作成するために、既存のテンプレートを複製およびカスタマイズする方法を学びました。また、ブートソースを持たない既存のWindowsテンプレートを構成し、インストールプロセスを自動化する方法も学びました。これにより、そのVMで作成されたインストールPVCをクローン化することで、今後の展開を簡単に作成できるようになります。また、特定のワークロード向けに仮想マシンをさらにカスタマイズし、よりクラウドに近い体験を実現するためのインスタンスタイプの使用方法についてもご紹介しました。
+
+### 再度Windows仮想マシンを作成してみる
+`[Catalog]`メニューに戻り、以下を選択します。
+
+`Disk source`: `PVC (clone PVC)`
+
+`PVC name`: `Windows-2k19-Sysprep-Template`
+
+
+`[Customize VirtualMachine]`ボタンをクリックして、ブートモードを `UEFI` ではなく `BIOS` に設定します。
+
+![alt text](images/3-vm-template/30_Windows_Template.png)
+
+BIOSを設定し、`[Create VirtualMachine]`（仮想マシンの作成）をクリックします。
+
+![alt text](images/3-vm-template/31_Windows_Template_BIOS.png)
+
+しばらくすると、新しい `Windows Server 2019` 仮想マシンがクローン作成された PVC から起動します。
+
+![alt text](images/3-vm-template/32_Windows_Template_Running.png)
+
+
+## インスタンスタイプ
+
+OpenShift Virtualizationでは、仮想マシン構成の標準化のために `インスタンスタイプ` を使用できます。
+これにより、クラウドのようにあらかじめ定義されたCPUやメモリ構成を簡単に選択できます。
+
+1. 左メニュー > `[Catalog]` を開くと `Instance Types` が表示
+2. 使用する OSイメージ（例: `rhel9`）を選択
+3. インスタンスタイプを選択（例: `Uシリーズ` の `medium`）
+4. VM 名やストレージクラスを確認後、`[Create VirtualMachine]` を実行
+
+インスタンスタイプの例：
+- **Nシリーズ**：ネットワーク重視（DPDKなど）
+- **Mシリーズ**：メモリ重視
+- **CXシリーズ**：CPU強化
+- **Oシリーズ**：汎用＋メモリオーバーコミット
+- **Uシリーズ**：バランス型（一般向け）
