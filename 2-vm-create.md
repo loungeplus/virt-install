@@ -24,15 +24,62 @@ Red Hat 提供のテンプレートには以下が含まれています：
 | **User Provided** | Red Hat Provided をユーザーが複製したもの |
 
 
-## 準備
+## 0. 準備
 
 1. 左メニューから `[Virtualization]` > `[VirtualMachines]` を開きます。
-2. `handson` プロジェクトを展開します。
-3. Running 状態のVMがあれば、選択して `[Actions]` > `[Stop]` をクリックしてください。
+2. `[プロジェクトの作成]`ボタンを押下し、`handson` プロジェクトを作成します。
 
-![vmstop](images/3-vm-template/00_VMs_Stopped.png)
+![alt text](images/3-vm-create/createproject1.png)
 
-## テンプレートの複製とカスタマイズ
+名前: `handson` を指定して、`[作成]`ボタンを押下してください。
+![alt text](images/3-vm-create/createproject2.png)
+
+## 1. カタログから仮想マシンの作成
+
+ここでは、登録済みの仮想マシンテンプレートを使用して、CentOS仮想マシンを起動します。
+
+`[Virtualization]`画面にて、`[Catalog]`メニューを開きます。
+
+![alt text](images/3-vm-create/quick-create-vm1.png)
+
+そして、以下をそれぞれ指定してください。
+
+- `① Select volume to boot from`: `centos-stream9`
+- `② Select Instance Type`: `General Purpose - U series - medium: 1CPUs, 4GiB Memory` (デフォルトで選択されます)
+
+OpenShift Virtualizationでは、仮想マシン構成の標準化のために `インスタンスタイプ` を使用できます。
+これにより、クラウドのようにあらかじめ定義されたCPUやメモリ構成を簡単に選択できます。
+
+    インスタンスタイプの例：
+    - Nシリーズ：ネットワーク重視（DPDKなど）
+    - Mシリーズ：メモリ重視
+    - CXシリーズ：CPU強化
+    - Oシリーズ：汎用＋メモリオーバーコミット
+    - Uシリーズ：バランス型（一般向け）
+
+
+- `③ VirtualMachine details`: `Name`にて、 `centos-stream9-hello-handson` を指定
+
+![alt text](images/3-vm-create/quick-create-vm2.png)
+
+最後に、`[Create Virtual Machine]`ボタンを押下してください。
+
+すると、CentOS9仮想マシンの状態が`Running`になるはずです。
+
+仮想マシンが起動したら、`[Console]`タブをクリックし、仮想マシンへログインしてみましょう。
+> Note.  *Guest login credentials* にて、それぞれユーザ名とパスワードをコピーし、*Paste to console*をクリックすると、コピペできます。ブラウザから、クリックボードへのアクセスを許可してください。
+
+![alt text](images/3-vm-create/quick-create-vm3.png)
+
+おめでとうございます！
+無事、OpenShift上に仮想マシンを展開することができました。
+
+## 2. テンプレートの複製とカスタマイズ
+
+ここでは、登録済みの仮想マシンテンプレートをクローンし、カスタムの仮想マシンテンプレートを作成して仮想マシンを起動してみます。
+
+利用する仮想マシンテンプレートは `CentOS9`で、Cloud-initでMariaDBを自動インストールします。
+
 
 ### プロジェクトを選択
 左メニューから *Templates* をクリックし、プロジェクトとして `openshift` を選択してください。
@@ -40,44 +87,45 @@ Red Hat 提供のテンプレートには以下が含まれています：
    - 必要に応じて *Show default projects* を有効化します。
    - *openshift* プロジェクトを表示するには、*Show default projects* ボタンを切り替える必要があるかもしれません。
 
-![alt text](images/3-vm-template/01_Project_Toggle.png)
+![alt text](images/3-vm-create/01_Project_Toggle.png)
 
 ### centos9のテンプレートを検索
 
 検索バーで `centos9` を検索し、`centos-stream9-server-small` を見つけます。
 
-![alt text](images/3-vm-template/02_Search_Centos9.png)
+![alt text](images/3-vm-create/02_Search_Centos9.png)
 
 ### カスタムテンプレートの作成
 テンプレート名をクリックし、**Create a new custom Template** を選択します。
 
-![alt text](images/3-vm-template/03_Create_Custom_Template.png)
+![alt text](images/3-vm-create/03_Create_Custom_Template.png)
 
-`Clone template` 画面で以下を入力してください。
+`Clone template` 画面で以下を入力し、`[Clone]`ボタンを押下してください。
+
 - Template name: `centos-stream9-server-db-small`
-- Project: `vmexamples-{user}`
+- Project: `handson`
 - Display name: `CentOS Stream 9 VM - Database Template Small`
-- Provider: `Roadshow {user}`
+- Provider: `OpenShift Virt Handson`
 
-![alt text](images/3-vm-template/04_Clone_Template_Options.png) 
+![alt text](images/3-vm-create/04_Clone_Template_Options.png) 
 
 ### CPUとメモリを編集
 CPU と メモリを、CPU: 2, Memory: 4GiB　へ修正します。
 
 `[Details]`タブをクリックし、詳細画面を表示します。
-![alt text](images/3-vm-template/05_Clone_Details.png)
+![alt text](images/3-vm-create/05_Clone_Details.png)
 
 そして、`CPU|Memory`の箇所の鉛筆マークをクリックしてください。
 
-![alt text](images/3-vm-template/06_Edit_CPU_Mem.png)
+![alt text](images/3-vm-create/06_Edit_CPU_Mem.png)
 
 ### Cloud-initの編集
 
 `[Scripts]`タブ > `[Cloud-init]` > `[Edit]` をクリックします。
 
-![alt text](images/3-vm-template/09_Scripts_CloudInit.png)
+![alt text](images/3-vm-create/09_Scripts_CloudInit.png)
 
-`[Cloud-init]`ダイアログが開いたら、*Configure via: Script* のラジオボタンをクリックし、以下の YAML スニペットで YAML を置き換えます。
+`[Cloud-init]`ダイアログが開いたら、*Configure*の *Script* のラジオボタンをクリックし、以下の YAML スニペットで YAML を置き換えます。このスクリプトにより、VMの展開に合わせて、Cloud-initで、MariaDBのインストールと起動を自動化できます。
 
 ```
 userData: |-
@@ -92,9 +140,9 @@ userData: |-
     - systemctl start mariadb
 ```
 
-![alt text](images/3-vm-template/10_Cloud_Init_Script.png)
+![alt text](images/3-vm-create/10_Cloud_Init_Script.png)
 
-`[Save]`ボタンをクリックすると、*Saved* という緑色のプロンプトが表示されます。その後、*Apply* ボタンをクリックします。
+`[保存]`ボタンをクリックすると、*Saved* という緑色のプロンプトが表示されます。その後、*Apply* ボタンをクリックします。
 
 ### カタログからテンプレートを選択
 左側のメニューにある `[Catalog]` をクリックし、 `[Template catalog]` オプションを選択してください。
@@ -102,19 +150,19 @@ userData: |-
 そして、`[User templates]` を選択します。
 すると、作成したテンプレートがタイルとして利用可能になっているはずです。
 
-![alt text](images/3-vm-template/11_User_Templates.png)
+![alt text](images/3-vm-create/11_User_Templates.png)
 
 
 ### テンプレートを使用した仮想マシンの作成
 
 タイルをクリックすると、VMの起動画面が表示されます。 `[Quick create VirtualMachine]`（仮想マシンのクイック作成）ボタンをクリックします。
 
-![alt text](images/3-vm-template/12_Quick_Create_Template.png)
+![alt text](images/3-vm-create/12_Quick_Create_Template.png)
 
 
 仮想マシンが起動すると、`[Overview]` ページに、テンプレートから作成され、定義した追加リソースが含まれていることがわかります。
 
-![alt text](images/3-vm-template/13_VM_From_Template.png)
+![alt text](images/3-vm-create/13_VM_From_Template.png)
 
 このテンプレートには、`MariaDB`が含まれています。確認してみましょう。
 
@@ -122,7 +170,7 @@ userData: |-
 上部にある `[Console]` タブをクリックします。
 提供された *Guest login credentials* と *Copy* および *Paste to console* ボタンを使用して、仮想マシンのコンソールにログインします。
 
-![alt text](images/3-vm-template/14_VM_Console.png)
+![alt text](images/3-vm-create/14_VM_Console.png)
 
 仮想マシンにログインしたら、次のコマンドを実行してMariaDBのインストールをテストします。
 
@@ -130,12 +178,11 @@ userData: |-
 sudo mysql -u root
 ```
 
-![alt text](images/3-vm-template/15_MariaDB_Login.png)
+![alt text](images/3-vm-create/15_MariaDB_Login.png)
 
 VMからログアウトするには、*Ctrl-D* を2回押します。
 
-
-## Windows VMテンプレートの作成
+## 3. テンプレートからWindows VMを作成
 
 続いて、Webサーバー上に提供されているISOを使用して、Microsoft Windows Server 2019をインストールしてみましょう。
 
@@ -148,13 +195,13 @@ VMからログアウトするには、*Ctrl-D* を2回押します。
 
 検索バーに *win* と入力するか、または *Microsoft Windows Server 2019 VM* のタイルが見つかるまで下にスクロールします。
 
-![alt text](images/3-vm-template/16_Windows_2k19_Tile.png)
+![alt text](images/3-vm-create/16_Windows_2k19_Tile.png)
 
 テンプレートに関連するデフォルト構成を示すダイアログが表示されます。
 
 > NOTE. ブートソースが提供されていないため、このVMを素早く作成するオプションが初期状態では表示されません。VMをニーズに合わせてカスタマイズする必要があります。
 
-![alt text](images/3-vm-template/17_Windows_2k19_Dialog.png)
+![alt text](images/3-vm-create/17_Windows_2k19_Dialog.png)
 
 ### 必要情報の入力
 ダイアログで以下を入力します
@@ -163,7 +210,7 @@ VMからログアウトするには、*Ctrl-D* を2回押します。
 
 - *Boot from CD* のチェックボックスをオンにします。
 
-- ドロップダウンメニューから *(creates PVC)* URLを選択します。
+- ドロップダウンメニューから *URL(creates PVC)*を選択します。
 
 - *image URL* を指定します : https://catalog-item-assets.s3.us-east-2.amazonaws.com/qcow_images/Windows2019.iso
 
@@ -176,27 +223,27 @@ VMからログアウトするには、*Ctrl-D* を2回押します。
 
 オプションを入力したら、テンプレートの設定を続けるために、下部の `[Customize VirtualMachine]` ボタンをクリックします。
 
-![alt text](images/3-vm-template/18_Windows_2k19_Parameters.png)
+![alt text](images/3-vm-create/18_Windows_2k19_Parameters.png)
 
 ### Boot Modeの変更
 `[Customize and create VirtualMachine]` 画面で、`[Boot mode]` オプションの横にある編集用鉛筆アイコンをクリックします。 
 
-![alt text](images/3-vm-template/19_Boot_Mode.png)
+![alt text](images/3-vm-create/19_Boot_Mode.png)
 
 `[Boot mode]` メニューが表示されたら、ドロップダウンメニューから `BIOSを選択し、 `[Save]` ボタンをクリックします。
 
-![alt text](images/3-vm-template/19_Boot_Mode.png)
+![alt text](images/3-vm-create/19_Boot_Mode.png)
 
 ### Sysprepを修正
 `[Scripts]` タブをクリックし、 *Sysprep* セクションまでスクロールダウンし、 `[Edit]` ボタンをクリックします。
 
-![alt text](images/3-vm-template/20_Customize_Scripts.png)
+![alt text](images/3-vm-create/20_Customize_Scripts.png)
 
 新しいウィンドウがポップアップし、新しいテンプレート用の *Sysprep* アクションを作成できます。
 
-![alt text](images/3-vm-template/21_Sysprep.png)
+![alt text](images/3-vm-create/21_Sysprep.png)
 
-次のコードブロックを *autounattend.xml* セクションにコピーして貼り付けます。
+次のコードブロックを *Autounattend.xml* セクションにコピーして貼り付けます。
 
 ```
 <?xml version="1.0" encoding="utf-8"?>
@@ -338,49 +385,50 @@ VMからログアウトするには、*Ctrl-D* を2回押します。
 
 コードを貼り付けたら、ダイアログの `[Save]` ボタンをクリックします。
 
-![alt text](images/3-vm-template/22_Windows_2k19_Sysprep.png)
+![alt text](images/3-vm-create/22_Windows_2k19_Sysprep.png)
 
 ### 仮想マシンの作成
 画面の下部にある `[Create VirtualMachine]` ボタンをクリックします。
 
-![alt text](images/3-vm-template/23_Create_VirtualMachine.png)
+![alt text](images/3-vm-create/23_Create_VirtualMachine.png)
 
 仮想マシンは、指定されたURLからISOイメージをダウンロードし、設定を行い、プロビジョニングされます。
 
-![alt text](images/3-vm-template/24_Windows_2k19_Provisioning.png)
+![alt text](images/3-vm-create/24_Windows_2k19_Provisioning.png)
 
 本ハンズオンでは、起動用のISOイメージのダウンロードが必要なため、数分かかる場合があります。 `Diagnostics` タブをクリックすると、ダウンロードの進行状況を確認できます。
 
-![alt text](images/3-vm-template/25_CD_Import.png)
+![alt text](images/3-vm-create/25_CD_Import.png)
 
 しばらくすると仮想マシンが起動し、ステータスが `Running` に変わります。 `[Console]`タブをクリックし、自動応答のインストールプロセスを表示します。
 
-![alt text](images/3-vm-template/26_Windows_2k19_Console.png)
+![alt text](images/3-vm-create/26_Windows_2k19_Console.png)
 
 VMのインストールプロセスが完了したら（プロビジョニングには3～5分、起動と設定には約10分かかります）、`[停止]`ボタンで電源をオフにします。
 
-![alt text](images/3-vm-template/27_Stop_Button.png)
+![alt text](images/3-vm-create/27_Stop_Button.png)
 
 ### ルートボリュームのクローンを作成
 
-VMを停止したら、今後、Windowsテンプレートによるインストールを行う際に、毎回カスタマイズプロセスを実行することなく使用できるルートボリュームのクローンを作成します。
+VMを停止したら、今後、Windowsテンプレートによるインストールを行う際に、
+毎回カスタマイズプロセスを実行することなく使用できる、ルートボリュームのクローンを作成します。
 
-左側のメニューで `[Storage]` をクリックし、次に `[PersistentVolumeClaims]` をクリックすると、`handson` ネームスペースで利用可能な PVC のリストが表示されます。
+左側のメニューで `[ストレージ]` をクリックし、次に `[PersistentVolumeClaims]` をクリックすると、`handson` Project で利用可能な PVC のリストが表示されます。
 
-インストールで作成された `win-sysprep` PVC を見つけ、右側の3点メニューから `[Clone PVC]` を選択します。
+インストールで作成された `win-sysprep` PVC を見つけ、右側の3点メニューから `[PVCのクローン]` を選択します。
 
-![alt text](images/3-vm-template/28_Storage_PVC.png)
+![alt text](images/3-vm-create/28_Storage_PVC.png)
 
 ポップアップメニューで以下のオプションを入力し、*Clone*（クローン）ボタンをクリックします。
 - *Name*: windows-2k19-sysprep-template
-- *Access mode*:  Shared access (RWX) 
-- *StorageClass*: ocs-external-storagecluster-ceph-rbd-immediate 
+- *Access mode*:  共有アクセス (RWX) 
+- *StorageClass*: ocs-storagecluster-ceph-rbd
 
-![alt text](images/3-vm-template/29_Clone_Menu.png)
+![alt text](images/3-vm-create/29_Clone_Menu.png)
 
+クローンしたPVCが `Bound`されます。
 
-保存すると、今後Windows VMを素早く作成する際に使用できます。
-
+![alt text](images/3-vm-create/pvcbound.png)
 
 ### 再度Windows仮想マシンを作成してみる
 `[Catalog]`メニューに戻り、以下を選択します。
@@ -392,30 +440,12 @@ VMを停止したら、今後、Windowsテンプレートによるインスト�
 
 `[Customize VirtualMachine]`ボタンをクリックして、ブートモードを `UEFI` ではなく `BIOS` に設定します。
 
-![alt text](images/3-vm-template/30_Windows_Template.png)
+![alt text](images/3-vm-create/30_Windows_Template.png)
 
 BIOSを設定し、`[Create VirtualMachine]`（仮想マシンの作成）をクリックします。
 
-![alt text](images/3-vm-template/31_Windows_Template_BIOS.png)
+![alt text](images/3-vm-create/31_Windows_Template_BIOS.png)
 
 しばらくすると、新しい `Windows Server 2019` 仮想マシンがクローン作成された PVC から起動します。
 
-![alt text](images/3-vm-template/32_Windows_Template_Running.png)
-
-
-## インスタンスタイプ
-
-OpenShift Virtualizationでは、仮想マシン構成の標準化のために `インスタンスタイプ` を使用できます。
-これにより、クラウドのようにあらかじめ定義されたCPUやメモリ構成を簡単に選択できます。
-
-1. 左メニュー > `[Catalog]` を開くと `Instance Types` が表示
-2. 使用する OSイメージ（例: `rhel9`）を選択
-3. インスタンスタイプを選択（例: `Uシリーズ` の `medium`）
-4. VM 名やストレージクラスを確認後、`[Create VirtualMachine]` を実行
-
-インスタンスタイプの例：
-- **Nシリーズ**：ネットワーク重視（DPDKなど）
-- **Mシリーズ**：メモリ重視
-- **CXシリーズ**：CPU強化
-- **Oシリーズ**：汎用＋メモリオーバーコミット
-- **Uシリーズ**：バランス型（一般向け）
+![alt text](images/3-vm-create/32_Windows_Template_Running.png)
