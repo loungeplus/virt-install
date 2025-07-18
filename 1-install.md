@@ -284,7 +284,7 @@ spec:
             region: ap-northeast-1
           credentialsSecret:
             name: aws-cloud-credentials
-          instanceType: c5n.metal　# インスタンスタイプを指定
+          instanceType: c5n.metal # インスタンスタイプを指定
           metadata:
             creationTimestamp: null
           blockDevices:
