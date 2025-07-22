@@ -10,7 +10,7 @@
 
 また、自分自身で事前に用意しておく必要のある情報です。
 
-- [Pull Secre](https://console.redhat.com/openshift/downloads#tool-pull-secret)
+- [Pull Secret](https://console.redhat.com/openshift/downloads#tool-pull-secret)
     - Red Hat Hybrid Cloud Consoleからダウンロード
     - Red Hat Accountを作成する必要があります。(無償)
 
