@@ -20,24 +20,24 @@
 
 . 左側のメニューで *Networking* をクリックし、次に *NodeNetworkState* をクリックして現在の構成を確認します。
 
-![](images/04-networking/01_NodeNetworkState_List.png)
+![](images/4-networking/01_NodeNetworkState_List.png)
 
 . 前述の通り、ワーカーノードにはこのモジュールで使用するためにすでにLinuxブリッジが構成されていることがわかります。ワーカーの1つを展開し、ブリッジ *br-flat* をクリックして、その詳細情報を表示します。
 
-![](images/04-networking/02_NodeNetworkState_Info.png)
+![](images/4-networking/02_NodeNetworkState_Info.png)
 
 . 隅にある「X」をクリックしてブリッジの詳細を閉じます。 *br-flat* と名付けられたこのブリッジは、*Kubernetes NMState Operator* を使用して作成されました。 さらに詳しく調べるには、左側のメニューで *NodeNetworkConfigurationPolicy* をクリックします。
 
-![](images/04-networking/03_NodeNetworkConfigurationPolicy_List.png)
+![](images/4-networking/03_NodeNetworkConfigurationPolicy_List.png)
 
 . *br-flat* を選択して情報を取得します。 
 
-![](images/04-networking/04_NodeNetworkConfigurationPolicy_Info.png)
+![](images/4-networking/04_NodeNetworkConfigurationPolicy_Info.png)
 
 >*NodeNetworkConfigurationPolicy* はノードレベルで構成を実行するため、現在のユーザーアカウントでこれらのオプションを変更することはできません。そのため、管理者に問い合わせるよう求められます。
 
 . このブリッジがどのように作成されたかを確認するには、*YAML* に切り替えて定義を確認します。管理者として、以下の yaml スニペットを使用して同様のブリッジを作成できます。
-![](images/04-networking/05_NodeNetworkConfigurationPolicy_YAML.png)
+![](images/4-networking/05_NodeNetworkConfigurationPolicy_YAML.png)
 
 ////
 [source,yaml]
@@ -74,7 +74,7 @@ VMでLinuxブリッジを使用するには、*Network Attachment Definition* �
 
 . 左側のメニューから *Network*、*Network Attachment Definition* の順に選択し、*Create Network Attachment Definition* ボタンをクリックします。
 
-![](images/04-networking/06_NetworkAttachDefinition_Create.png)
+![](images/4-networking/06_NetworkAttachDefinition_Create.png)
 
 >IMPORTANT: Network Attachment Definitionを作成する際には、vmexamples-{user}プロジェクト内であることを確認してください。
 
@@ -84,7 +84,7 @@ VMでLinuxブリッジを使用するには、*Network Attachment Definition* �
 * *Network Type*: Linux Bridge
 * *Bridge name*: br-flat
 
-![](images/04-networking/07_NetworkAttachDefinition_Create_Form.png)
+![](images/4-networking/07_NetworkAttachDefinition_Create_Form.png)
 
 >上記のフォームには、VLAN タグ番号を入力するフィールドがあります。これは、VLAN タグの割り当てが必要なネットワークに接続する場合に使用します。このラボでは、タグなしネットワークを使用しているため、VLAN 番号は必要ありません。
 
@@ -93,34 +93,34 @@ VMでLinuxブリッジを使用するには、*Network Attachment Definition* �
 
 . Network Attachment Definitionの詳細を確認します。これは *vmexamples-{user}* プロジェクトで作成されたため、他のプロジェクトでは利用できません。
 
-![](images/04-networking/08_NetworkAttachDefinition_Created.png)
+![](images/4-networking/08_NetworkAttachDefinition_Created.png)
 
 
 [[attach]]
 ## 仮想マシンをネットワークに接続
 . 左側のメニューで *VirtualMachines* に移動し、中央の列から *fedora01* VM を選択します。 *Configuration* タブをクリックし、左側の *Network* タブをクリックします。
-![](images/04-networking/09_VM_Network_Tab.png)
+![](images/4-networking/09_VM_Network_Tab.png)
 
 
 . *ネットワークインターフェースの追加* をクリックし、表示されるフォームに必要事項を入力して、*保存* をクリックします。
 
-![](images/04-networking/10_VM_Network_Attach.png)
+![](images/4-networking/10_VM_Network_Attach.png)
 
 >これは外部ネットワークに接続するブリッジであるため、ネットワークを使用する仮想マシン用のマスカレード（NAT）など、アクセスを有効にするためにOpenShiftの機能や能力に頼る必要はありません。そのため、ここでは *Type* は *Bridge* であるべきです。
 
 . *アクション* メニューまたは *Start* ボタンを使用してVMを起動し、*コンソール* タブに切り替えて起動を確認します。
 
-![](images/04-networking/11_VM_Network_Startup.png)
+![](images/4-networking/11_VM_Network_Startup.png)
 
 . *enp2s0* インターフェースは、フラットネットワーク（*192.168.64.0/18*）からIPアドレスを取得します。そのネットワークには、そのネットワークにIPを割り当てるDHCPサーバーがあります。 
 
-![](images/04-networking/12_VM_Network_Console.png)
+![](images/4-networking/12_VM_Network_Console.png)
 
 . fedora02 VMを同じ *flatnetwork* ネットワークにアタッチするために、同じ手順を繰り返します。
 
 . コンソールで *ping* コマンドを使用して、2つのVM（fedora01とfedora02）間の直接通信を実演します。
 
-![](images/04-networking/13_VM_Network_Ping.png)
+![](images/4-networking/13_VM_Network_Ping.png)
 
 [[udn]]
 ## User Defined Network
@@ -170,19 +170,19 @@ UDNにアクセスできるPodを作成する前に、ネームスペースと�
 
 . *Network* に移動し、*User Defined Network* をクリックして、プロジェクト *vmexamples-{user}-udn* が選択されていることを確認する。
 
-![](images/04-networking/14_UDN_List.png)
+![](images/4-networking/14_UDN_List.png)
 
 . *Create* をクリックし、 *UserDefinedNetwork* を選択します。
 
-![](images/04-networking/15_UDN_Create.png)
+![](images/4-networking/15_UDN_Create.png)
 
 . サブネット *192.168.254.0/24* を指定し、 *Create* をクリックします。
 
-![](images/04-networking/16_UDN_Form.png)
+![](images/4-networking/16_UDN_Form.png)
 
 . 作成したUDNの設定を確認します。
 
-![](images/04-networking/17_UDN_Created.png)
+![](images/4-networking/17_UDN_Created.png)
 
 * フォームを使用して作成した場合のデフォルト名は *primary-udn* です。
 * デフォルトではレイヤー2です（現時点でOpenShift仮想化でサポートされている唯一のレイヤー）。
@@ -191,13 +191,13 @@ UDNにアクセスできるPodを作成する前に、ネームスペースと�
 
 . 次に、左側のメニューで *NetworkAttachmentDefinitions* に移動し、関連するNADが自動的に作成されていることを確認します。
 
-![](images/04-networking/18_UDN_NAD.png)
+![](images/4-networking/18_UDN_NAD.png)
 
 . UserDefinedNetworkに接続された仮想マシンを作成するには、 https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/virtualization/networking#virt-connecting-vm-to-primary-udn[YAML定義の調整^] が必要です。このラボでは作業を簡単にするため、以下のYAML定義を使用し、UserDefinedNetworkに接続されたVMを作成します。
 
 . 次の画像のように、トップメニューを使用してYAMLをインポートできます。
 
-![](images/04-networking/19_UDN_Import_YAML.png)
+![](images/4-networking/19_UDN_Import_YAML.png)
 
 [source,yaml,role=execute,subs="attributes"]
 ----
@@ -266,15 +266,15 @@ spec:
 
 . 貼り付けが完了したら、画面下部の青い *Create* ボタンをクリックしてVMの作成プロセスを開始します。
 
-![](images/04-networking/20_Create_VM_YAML.png)
+![](images/4-networking/20_Create_VM_YAML.png)
 
 . *VirtualMachines* に切り替えて、VM が作成されるのを見ます。 作成されたら、新たに作成された *fedora-udn* 仮想マシンを確認します。 *Overview* タブの *Network* タイルに、UserDefinedNetwork から割り当てられた IP が表示されます。
 
-![](images/04-networking/21_UDN_Network_Tile.png)
+![](images/4-networking/21_UDN_Network_Tile.png)
 
 . コンソールタブに切り替えて、提供されたゲスト認証情報を使用してVMにログインします。 
 
-![](images/04-networking/22_UDN_Fedora_Console.png)
+![](images/4-networking/22_UDN_Fedora_Console.png)
 
 .. VMは定義されたサブネットからIPを割り当てます。
 .. VMはDHCPからゲートウェイ構成を自動的に取得します。
