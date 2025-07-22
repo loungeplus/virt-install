@@ -36,7 +36,7 @@ OpenShiftの構成を記述した `install-config.yaml` を作成します。
 [lab-user@bastion ~]$ vi install-config.yaml
 ```
 
-適宜、`YOUR_PULL_SECRET`や`sandboxXXX`などを書き換えてください。
+適宜、`YOUR_PULL_SECRET`、`sandboxXXX` を書き換えてください。
 
 
 ```
@@ -77,10 +77,10 @@ pullSecret: 'YOUR_PULL_SECRET'
 
 ## OpenShiftをIPIでインストール
 
-`install-config.yaml`を作成したら、`config`ディレクトリを作成し、そのディレクトリ配下へinstall-config.yamlを移動します。
-そして、`openshift-install`コマンドを実行し、OpenShiftのインストールを開始します。
+`install-config.yaml` を作成したら、`config` ディレクトリを作成し、そのディレクトリ配下へinstall-config.yamlを移動します。
+そして、`openshift-install` コマンドを実行し、OpenShiftのインストールを開始します。
 
-また、途中でAWSのACCESS_KEYとSECRET_ACCESS_KEYの入力を求められますので、講師に案内された各自の環境に合わせた情報を入力してください。
+また、途中でAWSの `ACCESS_KEY` と `SECRET_ACCESS_KEY` の入力を求められますので、講師に案内された各自の環境に合わせた情報を入力してください。
 
 ```
 [lab-user@bastion ~]$ mkdir config
@@ -100,7 +100,7 @@ INFO Login to the console with user: "kubeadmin", and password: "<Passowrd>"
 INFO Time elapsed: 42m51s  
 ```
 
-インストール作業はすべて自動で行われますが、40-50分程度かかるまで、気長に待ちましょう。
+インストール完了まで40-50分程度かかるため、気長に待ちましょう。
 
 ### インストール完了を確認
 `openshift-install`コマンドの実行ログに、`INFO Install complete! `が出力されたら、インストールが無事完了です。
