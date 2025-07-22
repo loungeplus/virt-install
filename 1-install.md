@@ -367,7 +367,7 @@ ODFは、rook/cephベースのコンテナストレージです。OpenShift Plat
 
 ![ODF Install3](images/1-install/odf-install1.png)
 
-`[Operator]` > `[インストール済みのOperator]`画面で、「OpenShift Data Foundation」のステータスが「✅Succeed」であることを確認します。
+`[Operator]` > `[インストール済みのOperator]`画面で、「OpenShift Data Foundation」および「OpenShift Data Foundation Client」のステータスが「✅Succeed」であることを確認します。
 
 ![ODF Install4](images/1-install/operator-installed.png)
 
