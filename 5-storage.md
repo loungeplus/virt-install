@@ -95,25 +95,25 @@ VMスナップショット機能により、クラスタ管理者およびアプ
 
 ページ上部の *Snapshots* タブに移動します。
 
-image::2025_spring/module-04-storage/05_Snapshot_Menu.png[link=self, window=blank, width=100%]
+![](images/5-storage/05_Snapshot_Menu.png)
 
 *スナップショットの取得* をクリックすると、ダイアログが開きます。
 
-image::2025_spring/module-04-storage/06_VM_Snapshot_Dialog.png[link=self, window=blank, width=100%]
+![](images/5-storage/06_VM_Snapshot_Dialog.png)
 
 >*cloudinitdisk* がスナップショットに含まれないという警告が表示されます。これは初期ブートに使用される一時的なディスクであるため、想定される動作です。
 
 スナップショットには自動的に名前が生成されます。 *Save* をクリックし、ステータスが *Operation complete* と表示されるまで待ちます。
 
-image::2025_spring/module-04-storage/07_VM_Snapshot_Taken.png[link=self, window=blank, width=100%]
+![](images/5-storage/07_VM_Snapshot_Taken.png)
 
 3点のドットメニューをクリックし、VMが現在実行中であるため、*Restore* オプションがグレー表示されていることを確認します。
 
-image::2025_spring/module-04-storage/08_VM_Restore_Disabled.png[link=self, window=blank, width=100%]
+![](images/5-storage/08_VM_Restore_Disabled.png)
 
 次に、*Console* タブに切り替えます。ログインして、VMが起動できないように変更を加えます。
 
-image::2025_spring/module-04-storage/09_Console_Login.png[link=self, window=blank, width=100%]
+![](images/5-storage/09_Console_Login.png)
 
 >*User name* と *Password* の両方の隣にコピーアイコンがあり、*Paste to console* (コンソールに貼り付け)ボタンも利用可能です。
 
@@ -125,7 +125,7 @@ sudo rm -rf /boot/grub2; sudo shutdown -r now
 
 実行すると、仮想マシンは自動的に再起動しますが、正常に起動することはできなくなります。
 
-image::2025_spring/module-04-storage/10_Bootloader_Broken.png[link=self, window=blank, width=100%]
+![](images/5-storage/10_Bootloader_Broken.png)
 
 >IMPORTANT: 前のステップでは、ゲスト内でオペレーティングシステムをシャットダウンしました。しかし、VMをホストしているPodがまだ実行中であるため、OpenShift仮想化はデフォルトでポリシーに基づいて自動的に再起動します。この動作は、グローバルまたはVMごとに変更できます。
 
