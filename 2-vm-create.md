@@ -62,20 +62,6 @@ OpenShift Virtualizationでは、仮想マシン構成の標準化のために `
 
 ![](images/2-vm-create/quick-create-vm2.png)
 
-- `④ Public SSH key`の `Not configured`リンクをクリック
-
-踏み台サーバにて以下を実行し、出力されたSSH Pub keyをコピーします。
-
-```
-[lab-user@bastion ~]$ cat ~/.ssh/r6rc4key.pub 
-ssh-rsa AAAA...
-```
-
-そして、`Public SSH key`メニューにて、コピーしたSSH Pub keyを貼り付けし、`Secret name`へ`bastion`を入力して、`[Save]`ボタンを押下してください。
-
-![](images/2-vm-create/quick-create-vm4.png)
-
-
 最後に、`[Create Virtual Machine]`ボタンを押下してください。
 
 すると、CentOS9仮想マシンの状態が`Running`になるはずです。
