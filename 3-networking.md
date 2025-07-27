@@ -3,70 +3,117 @@
 ## はじめに
 
 2章で述べたように、すべての仮想マシンはデフォルトで OpenShiftの提供するソフトウェア定義ネットワーク（SDN）に接続されています。
-これにより、展開した仮想マシンは、OpenShift クラスター上の他のワークロード（他の仮想マシンや OpenShift ネイティブアプリケーションを含む）からのアクセスが可能になり、仮想マシンとそれらがホストするアプリケーションをより近代的なワークフローで管理できるようになります。
+このSDNを *Primary Network*と呼びます。
 
-* SDN は、クラスタ内で VM または Pod としてデプロイされたアプリケーションを、制御された方法で抽象化、接続、公開するための追加機能を提供します。これには、OpenShift の *Service* および *Route* 機能が含まれます。
-* OpenShift のネットワークポリシーエンジンにより、VM のユーザーまたは管理者は、個々の VM またはプロジェクト/ネームスペース全体に対するネットワークトラフィックを許可または拒否するルールを作成することができます。
+Primary Networkにより、展開した仮想マシンは、OpenShift クラスター上の他の仮想マシンやコンテナからのアクセスが可能になり、仮想マシンと仮想マシン上に起動するアプリケーションを、より近代的な方法で管理できるようになります。
 
-しかし、必要に応じて仮想マシンをタグなしネットワークや VLAN などの 1 つ以上の物理ネットワークに直接接続することも可能です。これは SDN に加えて行われるもので、例えば、管理者は外部 IP アドレスから VM に接続でき、VM はレイヤー2 ネットワークを使用して直接接続できます。
+* SDN は、クラスタ内で VM または Pod としてデプロイされたアプリケーションを、抽象化、接続、公開するための追加機能を提供します。これには、OpenShift の *Service* および *Route* 機能が含まれます。
+* OpenShift のネットワークポリシーエンジンにより、VM のユーザーまたは管理者は、個々の VM または *Project* / *Namespace* 全体に対するネットワークトラフィックを許可または拒否するルールを作成することができます。
 
-これは、Linux ブリッジなどのホストネットワークの設定によって行われます。このラボのセクションでは、VM がそのブリッジに接続し、物理ネットワークに直接接続できるようにするための *Network Attachment Definition* を作成する手順を説明します。
+しかし、必要に応じて仮想マシンをタグなしネットワークや VLAN などの 1 つ以上の物理ネットワークに直接接続したいユースケースもあるでしょう。
 
-> NOTE: このロードショーで提供されるOpenShift 環境は、仮想マシンが接続する各コンピュートノードにLinuxブリッジがすでに設定されており、外部ネットワークリソースとの接続が容易です。
+OpenShift Virtualizationは、この要件に対し、*Secondary Network*　として、Linux ブリッジなどのホストネットワークの設定によって、仮想マシンをSDNとは異なるネットワークへ接続する機能を提供します。
+
+この機能は、SDN に加えて行われるもので、例えば、管理者は外部 IP アドレスから VM に接続でき、VM はレイヤー2 ネットワークを使用して直接接続できます。
+
+本トピックでは、VM をブリッジ接続し、物理ネットワークに直接接続できるようにするための *Network Attachment Definition* を作成する手順を説明します。
+
+## Kubernetes NMState Operatorのインストール
+仮想マシンを Secondary Networkへ接続するには、*Kubernetes NMState Operator*が必要です。
+
+*Kubernetes NMState Operator* は、NMState を使用して OpenShift Container Platform クラスタのノード全体でステート駆動型のネットワーク構成を実行するための Kubernetes API を提供します。 
+
+Kubernetes NMState Operator は、クラスタノード上のさまざまなネットワークインターフェースタイプ、DNS、ルーティングを構成するための機能を提供します。さらに、クラスターノード上のデーモンが、各ノードのネットワークインターフェースの状態を定期的にAPIサーバーに報告します。
+
+本ハンズオン環境には、NMState Operatorがインストールされています。そのため、まずは、NMState Operatorをインストールすることから始めましょう。
+
+`[管理者向け表示]` > `[Operator]` > `[OperatorHub]`を開き、検索ボックスへ `NMState`と入力します。
+
+![](images/3-networking/install-nmstate-operator-1.png)
+
+そして、`[インストール]`ボタン を続けて押下し、NMState Operatorをインストールします。
+
+![alt text](images/3-networking/install-nmstate-operator-2.png)
 
 
-## 環境の確認
+インストールボタンを押下後、`[インストール済みのOperator]`画面で、`Kubernetes NMState Operator`の状態が`Succeeded`になるまで待ちましょう。
 
-*Kubernetes NMState Operator* は、NMState を使用して OpenShift Container Platform クラスタのノード全体でステート駆動型のネットワーク構成を実行するための Kubernetes API を提供します。 Kubernetes NMState Operator は、クラスタノード上のさまざまなネットワークインターフェースタイプ、DNS、ルーティングを構成するための機能を提供します。さらに、クラスターノード上のデーモンが、各ノードのネットワークインターフェースの状態を定期的にAPIサーバーに報告します。
+![alt text](images/3-networking/install-nmstate-operator-3.png)
 
-左側のメニューで *Networking* をクリックし、次に *NodeNetworkState* をクリックして現在の構成を確認します。
+状態が`Succeeded`になったら、`Kubernetes NMState Operator`を開き、`[NMState]`の`インスタンスの作成`をクリックします。
+
+![alt text](images/3-networking/install-nmstate-operator-4.png)
+
+そして、デフォルトの設定のまま`[作成]`ボタンを押下してください。
+
+`[ホーム]` > `[概要]`の`クラスタインベントリ`にて、作成中のPodが存在しなくなるまで待ちましょう。
+
+![alt text](images/3-networking/install-nmstate-operator-5.png)
+
+
+左側のメニューで `[Virtualzation]` > `Networking` をクリックし、次に `NodeNetworkState` > `[Expand all]` をクリックして現在のノード上のネットワーク構成を確認します。
 
 ![alt text](images/3-networking/01_NodeNetworkState_List.png)
 
-前述の通り、ワーカーノードにはこのモジュールで使用するためにすでにLinuxブリッジが構成されていることがわかります。ワーカーの1つを展開し、ブリッジ *br-flat* をクリックして、その詳細情報を表示します。
+現状は、Primary Networkを提供するための デフォルトの OVSブリッジとインタフェースのみが存在します。
 
-![alt text](images/3-networking/02_NodeNetworkState_Info.png)
+## NodeNetworkConfigurationPolicyの作成
+
+ノード上に新たなネットワーク構成を追加するには、`NodeNetworkConfigurationPolicy`を作成します。
+
+### ノードラベルの追加
+
+`NodeNetworkConfigurationPolicy`を適用するノードは、ラベルを元に選択されます。
+1章で追加したベアメタルインスタンスのみに、`NodeNetworkConfigurationPolicy`を適用するために、ベアメタルインスタンスを識別するためのラベルを追加しておきましょう。
+
+`[管理者向け表示]` > `[コンピュート]` > `[ノード]`を開き、インスタンスタイプが`c5n.metal`のノードの メニューをクリックして、`[ラベルの編集]`を開きます。
+![alt text](image-3.png)
+
+`node-type=baremtal`というラベルを入力して、`[Enter]`した後、 `[保存]`ボタンを押下してください。
+
+![alt text](image-4.png)
+
+> Note. 1章にて、c5n.metalのノードを2台追加しているため、もう一台に対しても同様の手順でラベルを追加してください。
 
 
-隅にある「X」をクリックしてブリッジの詳細を閉じます。 *br-flat* と名付けられたこのブリッジは、*Kubernetes NMState Operator* を使用して作成されました。 さらに詳しく調べるには、左側のメニューで *NodeNetworkConfigurationPolicy* をクリックします。
+### NodeNetworkConfigurationPolicyの作成
 
-![alt text](images/3-networking/03_NodeNetworkConfigurationPolicy_List.png)
+![alt text](image-5.png)
 
-*br-flat* を選択して情報を取得します。 
-
-![alt text](images/3-networking/04_NodeNetworkConfigurationPolicy_Info.png)
+![alt text](image-6.png)
 
 
-> NOTE: *NodeNetworkConfigurationPolicy* はノードレベルで構成を実行するため、現在のユーザーアカウントでこれらのオプションを変更することはできません。そのため、管理者に問い合わせるよう求められます。
-
-このブリッジがどのように作成されたかを確認するには、*YAML* に切り替えて定義を確認します。管理者として、以下の yaml スニペットを使用して同様のブリッジを作成できます。
-
-![alt text](images/3-networking/05_NodeNetworkConfigurationPolicy_YAML.png)
 
 ```
-----
 apiVersion: nmstate.io/v1
 kind: NodeNetworkConfigurationPolicy
 metadata:
-  name: br-flat
+  name: create-br0-static
 spec:
+  nodeSelector:
+    node-type: baremetal 
   desiredState:
     interfaces:
-      - bridge:
+      - name: br0
+        type: linux-bridge
+        state: up
+        ipv4:
+          enabled: false
+          address:
+            - ip: 192.168.95.1
+              prefix-length: 24
+          dhcp: true
+        bridge:
           options:
             stp:
               enabled: false
-          port:
-            - name: enp3s0
-        description: Linux bridge with enp3s0 as a port
-        ipv4:
-          dhcp: false
-          enabled: false
-        name: br-flat
-        state: up
-        type: linux-bridge
-----
 ```
+
+![alt text](image-7.png)
+
+
+![alt text](image-8.png)
+
 
 ## Network Attachment Definitionの作成
 
