@@ -29,10 +29,10 @@ Red Hat 提供のテンプレートには以下が含まれています：
 1. 左メニューから `[Virtualization]` > `[VirtualMachines]` を開きます。
 2. `[プロジェクトの作成]`ボタンを押下し、`handson` プロジェクトを作成します。
 
-![alt text](images/3-vm-create/createproject1.png)
+![alt text](images/2-vm-create/createproject1.png)
 
 名前: `handson` を指定して、`[作成]`ボタンを押下してください。
-![alt text](images/3-vm-create/createproject2.png)
+![alt text](images/2-vm-create/createproject2.png)
 
 ## 1. カタログから仮想マシンの作成
 
@@ -40,7 +40,7 @@ Red Hat 提供のテンプレートには以下が含まれています：
 
 `[Virtualization]`画面にて、`[Catalog]`メニューを開きます。
 
-![alt text](images/3-vm-create/quick-create-vm1.png)
+![alt text](images/2-vm-create/quick-create-vm1.png)
 
 そして、以下をそれぞれ指定してください。
 
@@ -60,7 +60,21 @@ OpenShift Virtualizationでは、仮想マシン構成の標準化のために `
 
 - `③ VirtualMachine details`: `Name`にて、 `centos-stream9-hello-handson` を指定
 
-![alt text](images/3-vm-create/quick-create-vm2.png)
+![alt text](images/2-vm-create/quick-create-vm2.png)
+
+- `④ Public SSH key`の `Not configured`リンクをクリック
+
+踏み台サーバにて以下を実行し、出力されたSSH Pub keyをコピーします。
+
+```
+[lab-user@bastion ~]$ cat ~/.ssh/r6rc4key.pub 
+ssh-rsa AAAA...
+```
+
+そして、`Public SSH key`メニューにて、コピーしたSSH Pub keyを貼り付けし、`Secret name`へ`bastion`を入力して、`[Save]`ボタンを押下してください。
+
+![alt text](images/2-vm-create/quick-create-vm4.png)
+
 
 最後に、`[Create Virtual Machine]`ボタンを押下してください。
 
@@ -69,7 +83,7 @@ OpenShift Virtualizationでは、仮想マシン構成の標準化のために `
 仮想マシンが起動したら、`[Console]`タブをクリックし、仮想マシンへログインしてみましょう。
 > Note.  *Guest login credentials* にて、それぞれユーザ名とパスワードをコピーし、*Paste to console*をクリックすると、コピペできます。ブラウザから、クリックボードへのアクセスを許可してください。
 
-![alt text](images/3-vm-create/quick-create-vm3.png)
+![alt text](images/2-vm-create/quick-create-vm3.png)
 
 おめでとうございます！
 無事、OpenShift上に仮想マシンを展開することができました。
@@ -87,18 +101,18 @@ OpenShift Virtualizationでは、仮想マシン構成の標準化のために `
    - 必要に応じて *Show default projects* を有効化します。
    - *openshift* プロジェクトを表示するには、*Show default projects* ボタンを切り替える必要があるかもしれません。
 
-![alt text](images/3-vm-create/01_Project_Toggle.png)
+![alt text](images/2-vm-create/01_Project_Toggle.png)
 
 ### centos9のテンプレートを検索
 
 検索バーで `centos9` を検索し、`centos-stream9-server-small` を見つけます。
 
-![alt text](images/3-vm-create/02_Search_Centos9.png)
+![alt text](images/2-vm-create/02_Search_Centos9.png)
 
 ### カスタムテンプレートの作成
 テンプレート名をクリックし、**Create a new custom Template** を選択します。
 
-![alt text](images/3-vm-create/03_Create_Custom_Template.png)
+![alt text](images/2-vm-create/03_Create_Custom_Template.png)
 
 `Clone template` 画面で以下を入力し、`[Clone]`ボタンを押下してください。
 
@@ -107,23 +121,23 @@ OpenShift Virtualizationでは、仮想マシン構成の標準化のために `
 - Display name: `CentOS Stream 9 VM - Database Template Small`
 - Provider: `OpenShift Virt Handson`
 
-![alt text](images/3-vm-create/04_Clone_Template_Options.png) 
+![alt text](images/2-vm-create/04_Clone_Template_Options.png) 
 
 ### CPUとメモリを編集
 CPU と メモリを、CPU: 2, Memory: 4GiB　へ修正します。
 
 `[Details]`タブをクリックし、詳細画面を表示します。
-![alt text](images/3-vm-create/05_Clone_Details.png)
+![alt text](images/2-vm-create/05_Clone_Details.png)
 
 そして、`CPU|Memory`の箇所の鉛筆マークをクリックしてください。
 
-![alt text](images/3-vm-create/06_Edit_CPU_Mem.png)
+![alt text](images/2-vm-create/06_Edit_CPU_Mem.png)
 
 ### Cloud-initの編集
 
 `[Scripts]`タブ > `[Cloud-init]` > `[Edit]` をクリックします。
 
-![alt text](images/3-vm-create/09_Scripts_CloudInit.png)
+![alt text](images/2-vm-create/09_Scripts_CloudInit.png)
 
 `[Cloud-init]`ダイアログが開いたら、*Configure*の *Script* のラジオボタンをクリックし、以下の YAML スニペットで YAML を置き換えます。このスクリプトにより、VMの展開に合わせて、Cloud-initで、MariaDBのインストールと起動を自動化できます。
 
@@ -140,7 +154,7 @@ userData: |-
     - systemctl start mariadb
 ```
 
-![alt text](images/3-vm-create/10_Cloud_Init_Script.png)
+![alt text](images/2-vm-create/10_Cloud_Init_Script.png)
 
 `[保存]`ボタンをクリックすると、*Saved* という緑色のプロンプトが表示されます。その後、*Apply* ボタンをクリックします。
 
@@ -150,19 +164,19 @@ userData: |-
 そして、`[User templates]` を選択します。
 すると、作成したテンプレートがタイルとして利用可能になっているはずです。
 
-![alt text](images/3-vm-create/11_User_Templates.png)
+![alt text](images/2-vm-create/11_User_Templates.png)
 
 
 ### テンプレートを使用した仮想マシンの作成
 
 タイルをクリックすると、VMの起動画面が表示されます。 `[Quick create VirtualMachine]`（仮想マシンのクイック作成）ボタンをクリックします。
 
-![alt text](images/3-vm-create/12_Quick_Create_Template.png)
+![alt text](images/2-vm-create/12_Quick_Create_Template.png)
 
 
 仮想マシンが起動すると、`[Overview]` ページに、テンプレートから作成され、定義した追加リソースが含まれていることがわかります。
 
-![alt text](images/3-vm-create/13_VM_From_Template.png)
+![alt text](images/2-vm-create/13_VM_From_Template.png)
 
 このテンプレートには、`MariaDB`が含まれています。確認してみましょう。
 
@@ -170,7 +184,7 @@ userData: |-
 上部にある `[Console]` タブをクリックします。
 提供された *Guest login credentials* と *Copy* および *Paste to console* ボタンを使用して、仮想マシンのコンソールにログインします。
 
-![alt text](images/3-vm-create/14_VM_Console.png)
+![alt text](images/2-vm-create/14_VM_Console.png)
 
 仮想マシンにログインしたら、次のコマンドを実行してMariaDBのインストールをテストします。
 
@@ -178,7 +192,7 @@ userData: |-
 sudo mysql -u root
 ```
 
-![alt text](images/3-vm-create/15_MariaDB_Login.png)
+![alt text](images/2-vm-create/15_MariaDB_Login.png)
 
 VMからログアウトするには、*Ctrl-D* を2回押します。
 
@@ -195,13 +209,13 @@ VMからログアウトするには、*Ctrl-D* を2回押します。
 
 検索バーに *win* と入力するか、または *Microsoft Windows Server 2019 VM* のタイルが見つかるまで下にスクロールします。
 
-![alt text](images/3-vm-create/16_Windows_2k19_Tile.png)
+![alt text](images/2-vm-create/16_Windows_2k19_Tile.png)
 
 テンプレートに関連するデフォルト構成を示すダイアログが表示されます。
 
 > NOTE. ブートソースが提供されていないため、このVMを素早く作成するオプションが初期状態では表示されません。VMをニーズに合わせてカスタマイズする必要があります。
 
-![alt text](images/3-vm-create/17_Windows_2k19_Dialog.png)
+![alt text](images/2-vm-create/17_Windows_2k19_Dialog.png)
 
 ### 必要情報の入力
 ダイアログで以下を入力します
@@ -223,25 +237,25 @@ VMからログアウトするには、*Ctrl-D* を2回押します。
 
 オプションを入力したら、テンプレートの設定を続けるために、下部の `[Customize VirtualMachine]` ボタンをクリックします。
 
-![alt text](images/3-vm-create/18_Windows_2k19_Parameters.png)
+![alt text](images/2-vm-create/18_Windows_2k19_Parameters.png)
 
 ### Boot Modeの変更
 `[Customize and create VirtualMachine]` 画面で、`[Boot mode]` オプションの横にある編集用鉛筆アイコンをクリックします。 
 
-![alt text](images/3-vm-create/19_Boot_Mode.png)
+![alt text](images/2-vm-create/19_Boot_Mode.png)
 
 `[Boot mode]` メニューが表示されたら、ドロップダウンメニューから `BIOSを選択し、 `[Save]` ボタンをクリックします。
 
-![alt text](images/3-vm-create/19_Boot_Mode.png)
+![alt text](images/2-vm-create/19_Boot_Mode.png)
 
 ### Sysprepを修正
 `[Scripts]` タブをクリックし、 *Sysprep* セクションまでスクロールダウンし、 `[Edit]` ボタンをクリックします。
 
-![alt text](images/3-vm-create/20_Customize_Scripts.png)
+![alt text](images/2-vm-create/20_Customize_Scripts.png)
 
 新しいウィンドウがポップアップし、新しいテンプレート用の *Sysprep* アクションを作成できます。
 
-![alt text](images/3-vm-create/21_Sysprep.png)
+![alt text](images/2-vm-create/21_Sysprep.png)
 
 次のコードブロックを *Autounattend.xml* セクションにコピーして貼り付けます。
 
@@ -385,28 +399,28 @@ VMからログアウトするには、*Ctrl-D* を2回押します。
 
 コードを貼り付けたら、ダイアログの `[Save]` ボタンをクリックします。
 
-![alt text](images/3-vm-create/22_Windows_2k19_Sysprep.png)
+![alt text](images/2-vm-create/22_Windows_2k19_Sysprep.png)
 
 ### 仮想マシンの作成
 画面の下部にある `[Create VirtualMachine]` ボタンをクリックします。
 
-![alt text](images/3-vm-create/23_Create_VirtualMachine.png)
+![alt text](images/2-vm-create/23_Create_VirtualMachine.png)
 
 仮想マシンは、指定されたURLからISOイメージをダウンロードし、設定を行い、プロビジョニングされます。
 
-![alt text](images/3-vm-create/24_Windows_2k19_Provisioning.png)
+![alt text](images/2-vm-create/24_Windows_2k19_Provisioning.png)
 
 本ハンズオンでは、起動用のISOイメージのダウンロードが必要なため、数分かかる場合があります。 `Diagnostics` タブをクリックすると、ダウンロードの進行状況を確認できます。
 
-![alt text](images/3-vm-create/25_CD_Import.png)
+![alt text](images/2-vm-create/25_CD_Import.png)
 
 しばらくすると仮想マシンが起動し、ステータスが `Running` に変わります。 `[Console]`タブをクリックし、自動応答のインストールプロセスを表示します。
 
-![alt text](images/3-vm-create/26_Windows_2k19_Console.png)
+![alt text](images/2-vm-create/26_Windows_2k19_Console.png)
 
 VMのインストールプロセスが完了したら（プロビジョニングには3～5分、起動と設定には約10分かかります）、`[停止]`ボタンで電源をオフにします。
 
-![alt text](images/3-vm-create/27_Stop_Button.png)
+![alt text](images/2-vm-create/27_Stop_Button.png)
 
 ### ルートボリュームのクローンを作成
 
@@ -417,18 +431,18 @@ VMを停止したら、今後、Windowsテンプレートによるインスト�
 
 インストールで作成された `win-sysprep` PVC を見つけ、右側の3点メニューから `[PVCのクローン]` を選択します。
 
-![alt text](images/3-vm-create/28_Storage_PVC.png)
+![alt text](images/2-vm-create/28_Storage_PVC.png)
 
 ポップアップメニューで以下のオプションを入力し、*Clone*（クローン）ボタンをクリックします。
 - *Name*: windows-2k19-sysprep-template
 - *Access mode*:  共有アクセス (RWX) 
 - *StorageClass*: ocs-storagecluster-ceph-rbd
 
-![alt text](images/3-vm-create/29_Clone_Menu.png)
+![alt text](images/2-vm-create/29_Clone_Menu.png)
 
 クローンしたPVCが `Bound`されます。
 
-![alt text](images/3-vm-create/pvcbound.png)
+![alt text](images/2-vm-create/pvcbound.png)
 
 ### 再度Windows仮想マシンを作成してみる
 `[Catalog]`メニューに戻り、以下を選択します。
@@ -440,12 +454,142 @@ VMを停止したら、今後、Windowsテンプレートによるインスト�
 
 `[Customize VirtualMachine]`ボタンをクリックして、ブートモードを `UEFI` ではなく `BIOS` に設定します。
 
-![alt text](images/3-vm-create/30_Windows_Template.png)
+![alt text](images/2-vm-create/30_Windows_Template.png)
 
 BIOSを設定し、`[Create VirtualMachine]`（仮想マシンの作成）をクリックします。
 
-![alt text](images/3-vm-create/31_Windows_Template_BIOS.png)
+![alt text](images/2-vm-create/31_Windows_Template_BIOS.png)
 
 しばらくすると、新しい `Windows Server 2019` 仮想マシンがクローン作成された PVC から起動します。
 
-![alt text](images/3-vm-create/32_Windows_Template_Running.png)
+![alt text](images/2-vm-create/32_Windows_Template_Running.png)
+
+
+## 作成した仮想マシンへ外部からアクセスしてみる
+### Service/Routeによるアプリケーションの公開
+
+OpenShift上に展開された仮想マシンは、デフォルトで、OpenShiftのデフォルトのCNIである`OVN-Kubernetes`により自動的に払い出されたPodネットワークを`Primary Network`としてアタッチされます。
+Primary Networkでは、同一のOpenShiftクラスタ内の仮想マシンや、他のPodと、Kubernetesの`Service`リソースで提供されるドメインで名前解決し、接続することが可能です。
+
+また、OpenShiftでは、`Route`と呼ばれるHA proxyベースのL7ロードバランサが提供されます。仮想マシン上の特定のサービスへ80/443で接続したい場合は、その他のPodと同様、Routeを経由して接続できます。
+
+ここでは、本トピックの一番最初に作成したCentOSの仮想マシンへ`nginx`をインストールし、*Service* と *Route* を使用してアクセスできることを確認します。
+
+### 仮想マシンへnginxのインストール
+本トピックで作成した`centos-stream9-hello-handson`の `[Console]`を開きます。
+
+![alt text](images/2-vm-create/quick-create-vm3.png)
+
+仮想マシンへログインして、以下のコマンドを実行して`nginx`をインストールしてください。
+
+```
+sudo dnf -y install nginx
+```
+
+`nginx`をインストールできたら、サービスを起動しておきます。
+
+```
+sudo systemctl enable nginx --now
+sudo systemctl status nginx
+```
+
+![alt text](images/2-vm-create/install-nginx.png)
+
+### Service
+KubernetesのServiceリソースは、様々な`type`を利用できます。
+以下に簡単に利用できる`type`をまとめます。
+
+| 種類 | 説明 |
+|------|------|
+| **ClusterIP** | クラスタ内部（Pod間）の通信に使用される仮想IPを提供(デフォルト) |
+| **Node Port** | 各ノードに固定ポート（30000〜32767）を割り当て、ノードのIP＋ポートで外部からアクセス |
+| **LoadBalancer** | クラウドプロバイダが提供するL4ロードバランサを作成し、外部IPを自動割り当て |
+| **ExternalName** | DNS名を返すだけの特殊なService。外部サービスへの名前解決用として使用 |
+| **Headless** | `ClusterIP: None` を指定することで作成される特殊なClusterIP Service |
+
+### Serviceの作成
+
+左側のメニューで *ネットワーク* を展開し、*Services* をクリックします。読み込まれた画面で、画面の隅にある *[Serviceの作成]* ボタンをクリックします。
+
+![alt text](images/2-accessvm/13_Navigate_Service.png)
+
+
+YAMLを以下に置き換えます。
+
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: centos-webapp
+  namespace: handson
+spec:
+  type: ClusterIP
+  selector:
+    vm.kubevirt.io/name: centos-stream9-hello-handson
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+```
+
+
+画面下部の *[保存]* ボタンをクリックします。 YAML が保存されたという通知が表示されます。
+
+作成された `centos-webapp`Serviceの画面にて、[Pods]タブを開くと、トラフィックを転送する先のPodが表示されていることを確認してください。
+
+![alt text](images/2-vm-create/podselector.png)
+
+*Service* を作成したことで、`centos-stream9-hello-handson` VM上のnginx サーバーは OpenShift クラスター内からアクセスできるようになりました。
+他の仮想マシンは、Service名 + ネームスペース名から決定される DNS 名 **centos-webapp.handson.svc.cluster.local** を使用して、`centos-stream9-hello-handson` VM上のnginxサービスにアクセスできます。
+
+### Routeの作成
+nginxサービスへ外部からアクセスできるようには *Route* を使用してパブリックに公開することで実現できます。
+
+*ネットワーク* の下で、左側のナビゲーションメニューの *Routes* オプションをクリックします。 画面中央の *Create Route* ボタンをクリックします。
+
+![alt text](images/2-vm-create/17_Route_Navigation.png)
+
+. 以下の情報を使用してフォームに入力し、一番下までスクロールして、完了したら *Create* をクリックします。
+
+- *Name*: *handson*
+- *Service*: *centos-webapp*
+- *Target port*: *80 -> 80 (TCP)*
+- *Secure Route*: *Enabled*
+- *TLS termination*: *Edge*
+- *Insecure traffic*: *Redirect*
+
+
+![alt text](images/2-vm-create/route-1.png)
+![alt text](images/2-vm-create/route-2.png)
+
+入力したら、 `[作成]`ボタンを押下します。
+作成ボタンを押下後に表示される画面の`場所`という箇所にドメインが表示されています。
+
+![alt text](images/2-vm-create/route-3.png)
+
+このドメインへアクセスすると、自己証明書を利用しているため、セキュリティ警告画面が表示されます。
+`[詳細設定]`を押下し、`....にアクセスする（安全ではありません）`のリンクを開くと、以下の画面が表示されるはずです。
+
+![alt text](images/2-vm-create/route-4.png)
+
+
+## ライブマイグレーション
+本トピックの最後に、仮想マシンのライブマイグレーションを試してみましょう。
+`VirtualMachines`メニューを開き、作成済みの`centos-stream9-hello-handson`という名前のVMの詳細画面を開きます。
+
+
+`[Actions]`をクリックして、`[Migration]` > `[Compute]`をクリックします。
+
+![alt text](images/2-vm-create/livemigration-1.png)
+
+`General`に表示されているNode名に着目してください。この例では、`ip-10-0-28-29...`という名前が表示されています。
+
+![alt text](images/2-vm-create/livemigration-1.png)
+
+少し待つと、`Status`へ`Migrating`と表示されます。
+
+![alt text](images/2-vm-create/livemigration-3.png)
+
+すぐに `Running`へ戻り、`General`に表示されているNode名が変わったことを確認できます。
+
+![alt text](images/2-vm-create/livemigration-4.png)

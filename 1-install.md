@@ -23,10 +23,10 @@ OpenShiftの[インストール](https://docs.redhat.com/en/documentation/opensh
 提供された踏み台サーバにSSHでアクセスします。
 `<foo>.<bar>`の箇所は、講師の指示に従ってください。
 
+
 ```
 $ ssh lab-user@bastion.<foo>.<bar>.opentlc.com
 ```
-
 
 ### install-config.yamlの作成
 
@@ -395,7 +395,7 @@ ODFは、rook/cephベースのコンテナストレージです。OpenShift Plat
 - 要求された容量：2TB
 - ノードの選択：すべてのノードを✅
 
-`[次へ]`ボタンを押下
+その他の設定はデフォルトのまま `[次へ]`ボタンを押下
 
 #### 「セキュリティおよびネットワーク」の設定
 
@@ -406,7 +406,6 @@ ODFは、rook/cephベースのコンテナストレージです。OpenShift Plat
 #### 確認および作成
 
 `[StorageSystemの作成]`ボタンを押下
-![storagesystem4](images/1-install/storagesystem5.png)
 
 ODFのインストールには十分程度時間がかかるため、次のステップへ進んでください。
 
@@ -504,6 +503,28 @@ ux-backend-server-68b88df999-bb9mv                                2/2     Runnin
 
 いよいよ本題のOpenShift Virtualizationのインストールに進みましょう！
 
+インストールを進める前に、ノードの状態を確認しておきます。
+以下の通り、ROLES列似て、
+- `control-plane,master`: 3台
+- `worker`: 5台
+
+の`STATUS`列が、全て`Ready`であることを確認しましょう。
+
+> Note. 本ハンズオン環境は、デフォルトで、Master 3台、Worker 3台が払い出されています。ベアメタルインスタンスを2台追加したため、OpenShift Virtualizationをインストールする時点では、Workerが5台であることを確認しておきましょう。
+
+```
+[lab-user@bastion ~]$ oc get nodes
+NAME                                             STATUS   ROLES                  AGE   VERSION
+ip-10-0-0-62.ap-northeast-1.compute.internal     Ready    control-plane,master   49m   v1.31.10
+ip-10-0-12-161.ap-northeast-1.compute.internal   Ready    worker                 37m   v1.31.10
+ip-10-0-2-152.ap-northeast-1.compute.internal    Ready    worker                 58s   v1.31.10
+ip-10-0-28-29.ap-northeast-1.compute.internal    Ready    worker                 70s   v1.31.10
+ip-10-0-37-90.ap-northeast-1.compute.internal    Ready    control-plane,master   49m   v1.31.10
+ip-10-0-49-175.ap-northeast-1.compute.internal   Ready    worker                 41m   v1.31.10
+ip-10-0-74-6.ap-northeast-1.compute.internal     Ready    worker                 41m   v1.31.10
+ip-10-0-76-34.ap-northeast-1.compute.internal    Ready    control-plane,master   49m   v1.31.10
+```
+
 ### OpenShift Virtualization Operatorのインストール
 `[Operator]` > `[OperatorHub]`を開き、検索ボックスへ「OpenShift Virtualization」と入力します。
 
@@ -537,7 +558,7 @@ ODFの時と同様、Operatorの紹介画面が開きます。何も考えず`[�
 また、念の為、CLIでPodの状態が以下の通りであることを確認しましょう。
 
 ```
-[lab-user@bastion ~]$ oc get po -n openshift-cnv                                                                                  (base) 
+[lab-user@bastion ~]$ oc get po -n openshift-cnv                                                
 NAME                                                   READY   STATUS    RESTARTS      AGE
 aaq-operator-6bb68fd74b-thldw                          1/1     Running   0             46h
 bridge-marker-5vmjl                                    1/1     Running   0             46h
