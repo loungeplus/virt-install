@@ -14,7 +14,7 @@ OpenShift Virtualization固有のストレージプロトコル（NFS、iSCSI、
 
 Red Hat OpenShift でストレージをプロビジョニングする際の CSI ワークフローについては、以下の図を参照してください。
 
-![](images/5-storage/00_Disk_Concepts.png)
+![](images/4-storage/00_Disk_Concepts.png)
 
 [[examine_pvc]]
 
@@ -28,13 +28,13 @@ image::2025_spring/module-01-intro/12_Create_VM_Button.png[link=self, window=bla
 >利用可能なテンプレートのリストを確認すると、一部に青いバッジが付いているものがあることに気づくでしょう。これは、自動的にダウンロードされ保存されたテンプレートソースディスクを使用しているテンプレートであることを示しています。 
 >利用可能なオプションをカスタマイズできる環境で展開している場合は、これらのブートソースのデフォルトでの可用性を変更したり、これらのソースディスクを削除したりすることができます。
 
-![](images/5-storage/vm1_Create_VM_Templates.png)
+![](images/4-storage/vm1_Create_VM_Templates.png)
 
 *Fedora VM* タイルを選択すると、ダイアログが開きます。
 
 名前を *fedora01* に変更し、*Quick create VirtualMachine* をクリックします。
 
-![](images/5-storage/vm2_Create_VM_Quick.png)
+![](images/4-storage/vm2_Create_VM_Quick.png)
 
 VMステータスが *Provisioning* から *Starting* に変わり、準備が整うと *Running* に変わります。
 
@@ -48,7 +48,7 @@ VMステータスが *Provisioning* から *Starting* に変わり、準備が�
 * *Network*: このタイルでは、ソフトウェア定義ネットワーク（SDN）上の仮想マシンのIPアドレスと内部ホスト名が表示されます。高度なネットワークが定義されていない場合、VMは自動的にPodネットワークに接続されます。このラボの後半では、高度なネットワークオプションと、VMの接続性をカスタマイズする方法について説明します。
 * *Utilization*: このタイルでは、CPU、メモリ、ストレージ、ネットワークスループットなど、現在この仮想マシンで使用中のリソースの概要が表示されます。
 
-![](images/5-storage/vm3_Fedora_Running_Detail.png)
+![](images/4-storage/vm3_Fedora_Running_Detail.png)
 
 ## VM の PVC を確認する
 
@@ -56,7 +56,7 @@ VMステータスが *Provisioning* から *Starting* に変わり、準備が�
 
 左側のメニューで *Storage* -> *Persistent Volume Claims* をクリックして開始します。 *handson* ネームスペースにいることを確認してください。前のセクションで *fedora01* 仮想マシンを作成したときに作成された *fedora01* PVCが表示されるはずです。
 
-![](images/5-storage/01_PVC_List.png)
+![](images/4-storage/01_PVC_List.png)
 
 *fedora01* PVCをクリックすると、VMをバックアップするストレージボリュームに関する追加の詳細情報が表示されます。
 +
@@ -67,7 +67,7 @@ VMステータスが *Provisioning* から *Starting* に変わり、準備が�
 .. PVCのボリュームモードはBlockです
 .. ボリュームは *ocs-storagecluster-ceph-rbd-virtualization* ストレージクラスを使用しています。
 
-![](images/5-storage/02_Fedora01_PVC_Details.png)
+![](images/4-storage/02_Fedora01_PVC_Details.png)
 
 [[managing_snapshots]]
 ## スナップショットの管理
@@ -91,29 +91,29 @@ VMスナップショット機能により、クラスタ管理者およびアプ
 
 現在、このVMのスナップショットは概要ページに表示されていないことに注意してください。
 
-![](images/5-storage/03_VM_Overview_Snapshot.png)
+![](images/4-storage/03_VM_Overview_Snapshot.png)
 
 ページ上部の *Snapshots* タブに移動します。
 
-![](images/5-storage/05_Snapshot_Menu.png)
+![](images/4-storage/05_Snapshot_Menu.png)
 
 *スナップショットの取得* をクリックすると、ダイアログが開きます。
 
-![](images/5-storage/06_VM_Snapshot_Dialog.png)
+![](images/4-storage/06_VM_Snapshot_Dialog.png)
 
 >*cloudinitdisk* がスナップショットに含まれないという警告が表示されます。これは初期ブートに使用される一時的なディスクであるため、想定される動作です。
 
 スナップショットには自動的に名前が生成されます。 *Save* をクリックし、ステータスが *Operation complete* と表示されるまで待ちます。
 
-![](images/5-storage/07_VM_Snapshot_Taken.png)
+![](images/4-storage/07_VM_Snapshot_Taken.png)
 
 3点のドットメニューをクリックし、VMが現在実行中であるため、*Restore* オプションがグレー表示されていることを確認します。
 
-![](images/5-storage/08_VM_Restore_Disabled.png)
+![](images/4-storage/08_VM_Restore_Disabled.png)
 
 次に、*Console* タブに切り替えます。ログインして、VMが起動できないように変更を加えます。
 
-![](images/5-storage/09_Console_Login.png)
+![](images/4-storage/09_Console_Login.png)
 
 >*User name* と *Password* の両方の隣にコピーアイコンがあり、*Paste to console* (コンソールに貼り付け)ボタンも利用可能です。
 
@@ -125,7 +125,7 @@ sudo rm -rf /boot/grub2; sudo shutdown -r now
 
 実行すると、仮想マシンは自動的に再起動しますが、正常に起動することはできなくなります。
 
-![](images/5-storage/10_Bootloader_Broken.png)
+![](images/4-storage/10_Bootloader_Broken.png)
 
 >IMPORTANT: 前のステップでは、ゲスト内でオペレーティングシステムをシャットダウンしました。しかし、VMをホストしているPodがまだ実行中であるため、OpenShift仮想化はデフォルトでポリシーに基づいて自動的に再起動します。この動作は、グローバルまたはVMごとに変更できます。
 
@@ -133,28 +133,28 @@ sudo rm -rf /boot/grub2; sudo shutdown -r now
 
 *Overview* タブをクリックして、VM が停止したことを確認できます。 また、先ほど取得したスナップショットが *Snapshot* タイルに表示されていることも確認できます。 
 
-![](images/5-storage/11_VM_Stopped_Snapshot.png)
+![](images/4-storage/11_VM_Stopped_Snapshot.png)
 
 *Snapshot* タイルで、当社のスナップショットの横にある3つのドットのメニューをクリックします。VMが停止している状態で、*Restore* がグレー表示ではなくなります。クリックします。
 
-![](images/5-storage/12_VM_Restore.png)
+![](images/4-storage/12_VM_Restore.png)
 
 表示されるダイアログで *Restore* をクリックします。
 
-![](images/5-storage/13_VM_Restore_Dialog.png)
+![](images/4-storage/13_VM_Restore_Dialog.png)
 
 VM が復元されるまで待ちます。このプロセスはかなり速く完了します。 上部にある *Snapshots* タブをクリックすると、直近の復元操作の詳細を確認できます。
 
-![](images/5-storage/14_VM_Restored.png)
+![](images/4-storage/14_VM_Restored.png)
 
 
 *Overview* タブに戻り、VM を起動します。
 
-![](images/5-storage/15_VM_Start.png)
+![](images/4-storage/15_VM_Start.png)
 
 *Console* タブをクリックして、VM が再起動し、OS に正常にブートアップしたことを確認します。
 
-![](images/5-storage/16_VM_Running.png)
+![](images/4-storage/16_VM_Running.png)
 
 [[clone_vm]]
 ## 仮想マシンのクローン
@@ -163,15 +163,15 @@ VM が復元されるまで待ちます。このプロセスはかなり速く�
 
 *Overview* 画面に戻り、*Actions* ドロップダウンメニューをクリックしてVMをクローニングするオプションを表示します。
 
-![](images/5-storage/17_Overview_Actions_Clone.png)
+![](images/4-storage/17_Overview_Actions_Clone.png)
 
 *Actions* メニューから *Clone* をクリックすると、ダイアログが開きます。 複製したVMに *fedora02* という名前を付け、*Start VirtualMachine on clone* のチェックボックスがチェックされていないことを確認してから、*Clone* をクリックします。
 
-![](images/5-storage/18_VM_Clone_Dialog.png)
+![](images/4-storage/18_VM_Clone_Dialog.png)
 
 新しいVMが作成され、ディスクが複製され、ポータルが自動的に新しいVMにリダイレクトされます。 *Created* の時間がごく最近であることがわかります。
 
-![](images/5-storage/19_VM_Cloned.png)
+![](images/4-storage/19_VM_Cloned.png)
 
 >IMPORTANT: クローンされたVMはソースVMと同じIDを持つため、VMとやり取りするアプリケーションや他のクライアントとの間で競合が発生する可能性があります。外部ネットワークに接続されているVMや同じプロジェクト内のVMをクローンする場合は、注意が必要です。
 
@@ -179,11 +179,11 @@ VM が復元されるまで待ちます。このプロセスはかなり速く�
 
 YAML内の *app* と *kubevirt.io/domain* の値を *fedora02* に設定し、下部の *Save* ボタンをクリックすると、*fedora02* が新しいバージョンに更新された旨のメッセージが表示されます。この作業を今行うことで、後のモジュールでこのVMを使用する際に問題を回避することができます。
 
-![](images/5-storage/20_Cloned_VM_YAML.png)
+![](images/4-storage/20_Cloned_VM_YAML.png)
 
 仮想マシンの YAML の変更が完了したら、*fedora01* と *fedora02* の両方を実行するように起動します。
 
-![](images/5-storage/22_Fedora02_Running.png)
+![](images/4-storage/22_Fedora02_Running.png)
 
 ## まとめ
 
