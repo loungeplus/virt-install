@@ -1,6 +1,6 @@
 # 仮想マシンのネットワーク管理
 
-== はじめに
+## はじめに
 
 前節で述べたように、すべての仮想マシンはデフォルトで OpenShift ソフトウェア定義ネットワーク（SDN）に接続されており、これにより、OpenShift クラスター上の他のワークロード（他の仮想マシンや OpenShift ネイティブアプリケーションを含む）からのアクセスが可能になり、仮想マシンとそれらがホストするアプリケーションをより近代的なワークフローで管理できるようになります。
 
@@ -14,7 +14,8 @@
 NOTE: このロードショーで提供されるOpenShift 環境は、仮想マシンが接続する各コンピュートノードにLinuxブリッジがすでに設定されており、外部ネットワークリソースとの接続が容易です。
 
 [[確認]]
-== 環境の確認
+
+## 環境の確認
 
 *Kubernetes NMState Operator* は、NMState を使用して OpenShift Container Platform クラスタのノード全体でステート駆動型のネットワーク構成を実行するための Kubernetes API を提供します。 Kubernetes NMState Operator は、クラスタノード上のさまざまなネットワークインターフェースタイプ、DNS、ルーティングを構成するための機能を提供します。さらに、クラスターノード上のデーモンが、各ノードのネットワークインターフェースの状態を定期的にAPIサーバーに報告します。
 
@@ -68,7 +69,7 @@ spec:
 ////
 
 [[nad]]
-== Network Attachment Definitionの作成
+## Network Attachment Definitionの作成
 
 VMでLinuxブリッジを使用するには、*Network Attachment Definition* を作成する必要があります。これは、OpenShiftにネットワークを通知し、仮想マシンがネットワークに接続できるようにするものです。Network Attachment Definitionはプロジェクトに紐づいており、そのプロジェクトにデプロイされた仮想マシンだけがアクセスできます。 Network Attachment Definitionがデフォルトのプロジェクトに作成された場合、グローバルに利用可能になります。 これにより、管理者は、VMを管理するアクセス権を持つ特定のユーザーに対して、どのネットワークを利用可能にするか、または利用不可能にするかを制御することができます。
 
@@ -102,7 +103,7 @@ NOTE: ホスト上の単一のLinuxブリッジには、多くの異なるVLAN�
 image::2025_spring/module-09-networking/08_NetworkAttachDefinition_Created.png[link=self, window=blank, width=100%]
 
 [[attach]]
-== 仮想マシンをネットワークに接続
+## 仮想マシンをネットワークに接続
 . 左側のメニューで *VirtualMachines* に移動し、中央の列から *fedora01* VM を選択します。 *Configuration* タブをクリックし、左側の *Network* タブをクリックします。
 +
 image::2025_spring/module-09-networking/09_VM_Network_Tab.png[link=self, window=blank, width=100%]
@@ -128,7 +129,7 @@ image::2025_spring/module-09-networking/12_VM_Network_Console.png[link=self, win
 image::2025_spring/module-09-networking/13_VM_Network_Ping.png[link=self, window=blank, width=100%]
 
 [[udn]]
-== User Defined Network
+## User Defined Network
 
 User Defined Network（UDN）の実装前は、OpenShift Container Platform用のOVN-Kubernetes CNIプラグインはプライマリまたはメインネットワーク上のレイヤー3トポロジーのみをサポートしていました。Kubernetesの設計原則により、すべてのPodはメインネットワークに接続され、すべてのPodはIPアドレスを使用して相互に通信し、Pod間のトラフィックはネットワークポリシーに従って制限されます。新しいネットワークアーキテクチャを学ぶことは、多くの従来の仮想化管理者からしばしば表明される懸念事項です。
 
@@ -147,7 +148,7 @@ User Defined Networkには、以下の利点があります。
 *高度な機能* - User Defined Networkにより、管理者は複数のネームスペースを単一のネットワークに接続したり、異なるネームスペースのセットごとに個別のネットワークを作成したりすることができます。 また、ユーザーは異なるネームスペースやクラスターにまたがって IP サブネットを指定し、再利用することもでき、一貫したネットワーク環境を提供します。
 
 
-=== OpenShift VirtualizationによるUser Defined Network
+=## OpenShift VirtualizationによるUser Defined Network
 
 OpenShift Container Platform のウェブコンソールまたは CLI を使用して、仮想マシン（VM）のプライマリインターフェイス上のUser Defined Network（UDN）に仮想マシンを接続することができます。プライマリUser Defined Networkは、指定したネームスペースのデフォルトのPod Networkに置き換わります。Pod Networkとは異なり、プライマリ UDN はプロジェクトごとに定義でき、各プロジェクトは固有のサブネットとトポロジーを使用できます。
 
@@ -167,7 +168,7 @@ OpenShift Container Platform のウェブコンソールまたは CLI を使用�
 
 NOTE: OpenShift Virtualization は現在、セカンダリUser Defined Networkをサポートしていません。
 
-=== User Defined Networkの使用
+=## User Defined Networkの使用
 
 UDNにアクセスできるPodを作成する前に、ネームスペースとネットワークを作成する必要があります。Podを新しいネットワークにネームスペースを割り当てることや、既存のネームスペースにUDNを作成することは、OVN-Kubernetesでは受け付けられません。
 
@@ -285,7 +286,7 @@ image::2025_spring/module-09-networking/22_UDN_Fedora_Console.png[link=self, win
 .. VMはDHCPからゲートウェイ構成を自動的に取得します。
 .. VMはUser Defined Networkを使用してインターネットにアクセスできます。
 
-== まとめ
+## まとめ
 
 このモジュールでは、物理ネットワークの操作と、仮想マシン（VM）を既存のネットワークに直接接続する方法について学習しました。仮想マシンを物理ネットワークに直接接続することで、管理者は仮想マシンに直接アクセスできるだけでなく、仮想マシンをストレージネットワークや管理ネットワークなどの専用ネットワークに接続することも可能になります。
 
