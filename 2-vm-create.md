@@ -451,7 +451,7 @@ BIOSを設定し、`[Create VirtualMachine]`（仮想マシンの作成）をク
 ![](images/2-vm-create/32_Windows_Template_Running.png)
 
 
-## 作成した仮想マシンへ外部からアクセスしてみる
+## 4. 作成した仮想マシンへ外部からアクセスしてみる
 ### Service/Routeによるアプリケーションの公開
 
 OpenShift上に展開された仮想マシンは、デフォルトで、OpenShiftのデフォルトのCNIである`OVN-Kubernetes`により自動的に払い出されたPodネットワークを`Primary Network`としてアタッチされます。
@@ -559,7 +559,7 @@ nginxサービスへ外部からアクセスできるようには *Route* を使
 ![](images/2-vm-create/route-4.png)
 
 
-## ライブマイグレーション
+## 5. ライブマイグレーション
 本トピックの最後に、仮想マシンのライブマイグレーションを試してみましょう。
 `VirtualMachines`メニューを開き、作成済みの`centos-stream9-hello-handson`という名前のVMの詳細画面を開きます。
 
