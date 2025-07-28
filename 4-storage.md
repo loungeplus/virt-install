@@ -20,7 +20,10 @@ Red Hat OpenShift でストレージをプロビジョニングする際の CSI 
 
 ## 事前準備
 ### 仮想マシンの作成
-`[Virtualization]` パースペクティブを開き、`handson` プロジェクト内で `[Create VirtualMachine]` ボタンをクリックし、ドロップダウンメニューから `[From template]` を選択します。
+`[Virtualization]` > `[VirtualMachines]`を開き、`handson` プロジェクト内で `[Create]` ボタンをクリックし、ドロップダウンメニューから `[From template]` を選択します。
+
+![alt text](images/4-storage/vmcreate-1.png)
+
 >VM は、InstanceType ウィザードから作成することも、カスタムの YAML 定義を入力して作成することもできますが、今回のラボのシナリオでは、既存のテンプレートをベースとした VM の作成に限定します。
 
 カタログ画面に移動し、利用可能な事前定義のVMテンプレートを示す多数のタイルが表示されます。
@@ -30,7 +33,9 @@ Red Hat OpenShift でストレージをプロビジョニングする際の CSI 
 
 ![](images/4-storage/vm1_Create_VM_Templates.png)
 
-`[Fedora VM]` タイルを選択すると、ダイアログが開きます。
+検索バーで、`fedora`と入力し、`[Fedora VM]` タイルを選択すると、ダイアログが開きます。
+
+![alt text](images/4-storage/createvm-2.png)
 
 名前を *fedora01* に変更し、`[Quick create VirtualMachine]` をクリックします。
 
@@ -38,9 +43,13 @@ Red Hat OpenShift でストレージをプロビジョニングする際の CSI 
 
 VMステータスが `Provisioning` から `Starting` に変わり、準備が整うと `Running` に変わります。
 
-この間、ストレージプロバイダはテンプレートディスクを複製し、新しく作成された仮想マシンで使用できるようにしています。この処理にかかる時間は、ブートディスクの作成に使用するストレージプロバイダや、システムの現在の負荷によって異なります。
+この間、ストレージプロバイダはテンプレートディスクを複製し、新しく作成された仮想マシンで使用できるようにしています。
 
-仮想マシンが起動したら、右側の列にある *Overview* ページでさらに詳しく調べることができます: 
+この処理にかかる時間は、ブートディスクの作成に使用するストレージプロバイダや、システムの現在の負荷によって異なります。
+
+仮想マシンが起動したら、`Overview` ページでさらに詳しく調べることができます: 
+
+![alt text](images/4-storage/createvm-3.png)
 
 * **Details**：このタイルには、VM の名前、ステータス、作成時間、OS、仮想リソース、および作成元のテンプレートなど、VM に関する情報が表示されます。また、VNC 端末の縮小版と、フルスクリーン Web コンソールを起動する機能も含まれています。
 
@@ -52,15 +61,13 @@ VMステータスが `Provisioning` から `Starting` に変わり、準備が�
 
 * **Utilization**: このタイルでは、CPU、メモリ、ストレージ、ネットワークスループットなど、現在この仮想マシンで使用中のリソースの概要が表示されます。
 
-![](images/4-storage/vm3_Fedora_Running_Detail.png)
-
 ## VM の PVC を確認する
 
 本章は、先ほど作成した仮想マシン *fedora01* のバックエンドストレージを詳しく見ていきます。
 
-左側のメニューで `[Storage]` -> `[Persistent Volume Claims]` をクリックして開始します。 `handson` ネームスペースにいることを確認してください。前のセクションで *fedora01* 仮想マシンを作成したときに作成された *fedora01* PVCが表示されるはずです。
+左側のメニューで `[ストレージ]` > `[Persistent Volume Claims]` をクリックして開始します。 `handson` ネームスペースにいることを確認してください。前のセクションで *fedora01* 仮想マシンを作成したときに作成された *fedora01* PVCが表示されるはずです。
 
-![](images/4-storage/01_PVC_List.png)
+![alt text](images/4-storage/createvm-4.png)
 
 *fedora01* PVCをクリックすると、VMをバックアップするストレージボリュームに関する追加の詳細情報が表示されます。
 
@@ -95,17 +102,15 @@ VMスナップショット機能により、クラスタ管理者およびアプ
 
 ### スナップショットの作成と使用
 
-`[Virtualization]` パースペクティブドロップダウンに戻り、左側のメニューで `[VirtualMachines]` をクリックします。 中央列のプロジェクト *handson* を展開し、*fedora01* 仮想マシンをハイライトします。
+`[Virtualization]` パースペクティブドロップダウンに戻り、左側のメニューで `[VirtualMachines]` をクリックします。 中央列のプロジェクト *handson* を展開し、*fedora01* 仮想マシンを選択します。
 
 現在、このVMのスナップショットは概要ページに表示されていないことに注意してください。
 
-![](images/4-storage/03_VM_Overview_Snapshot.png)
-
 ページ上部の `[Snapshots]` タブに移動します。
 
-![](images/4-storage/05_Snapshot_Menu.png)
+![alt text](images/4-storage/snapshot-1.png)
 
-`[スナップショットの取得]` をクリックすると、ダイアログが開きます。
+`[Take snapshot]`ボタン をクリックすると、ダイアログが開きます。
 
 ![](images/4-storage/06_VM_Snapshot_Dialog.png)
 
