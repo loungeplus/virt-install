@@ -70,7 +70,7 @@ Kubernetes NMState Operator は、クラスタノード上のさまざまなネ�
 
 ![alt text](images/3-networking/nncp-add-node-label-1.png)
 
-`node-type=baremtal`というラベルを入力して、`[Enter]`した後、 `[保存]`ボタンを押下してください。
+`node-type=baremetal`というラベルを入力して、`[Enter]`した後、 `[保存]`ボタンを押下してください。
 
 ![alt text](images/3-networking/nncp-add-node-label-2.png)
 
