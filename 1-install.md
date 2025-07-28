@@ -1,6 +1,6 @@
 # OpenShift Virtualizationの構築
 
-本トピックでは、AWS上にOpenShiftをIPI（Installer Provisioned Infrastructure）方式でインストールし、OpenShift Virtualizationを利用可能にするまでの流れを解説します。
+本章では、AWS上にOpenShiftをIPI（Installer Provisioned Infrastructure）方式でインストールし、OpenShift Virtualizationを利用可能にするまでの流れを解説します。
 
 ## 準備編：OpenShiftのインストール方法について
 

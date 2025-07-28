@@ -24,7 +24,7 @@ Red Hat 提供のテンプレートには以下が含まれています：
 | **User Provided** | Red Hat Provided をユーザーが複製したもの |
 
 
-## 0. 準備
+## 準備
 
 1. 左メニューから `[Virtualization]` > `[VirtualMachines]` を開きます。
 2. `[プロジェクトの作成]`ボタンを押下し、`handson` プロジェクトを作成します。
@@ -34,7 +34,7 @@ Red Hat 提供のテンプレートには以下が含まれています：
 名前: `handson` を指定して、`[作成]`ボタンを押下してください。
 ![](images/2-vm-create/createproject2.png)
 
-## 1. カタログから仮想マシンの作成
+## カタログから仮想マシンの作成
 
 ここでは、登録済みの仮想マシンテンプレートを使用して、CentOS仮想マシンを起動します。
 
@@ -74,7 +74,7 @@ OpenShift Virtualizationでは、仮想マシン構成の標準化のために `
 おめでとうございます！
 無事、OpenShift上に仮想マシンを展開することができました。
 
-## 2. テンプレートの複製とカスタマイズ
+## テンプレートの複製とカスタマイズ
 
 ここでは、登録済みの仮想マシンテンプレートをクローンし、カスタムの仮想マシンテンプレートを作成して仮想マシンを起動してみます。
 
@@ -182,7 +182,7 @@ sudo mysql -u root
 
 VMからログアウトするには、*Ctrl-D* を2回押します。
 
-## 3. テンプレートからWindows VMを作成
+## テンプレートからWindows VMを作成
 
 続いて、Webサーバー上に提供されているISOを使用して、Microsoft Windows Server 2019をインストールしてみましょう。
 
@@ -451,7 +451,7 @@ BIOSを設定し、`[Create VirtualMachine]`（仮想マシンの作成）をク
 ![](images/2-vm-create/32_Windows_Template_Running.png)
 
 
-## 4. 作成した仮想マシンへ外部からアクセスしてみる
+## 作成した仮想マシンへ外部からアクセスしてみる
 ### Service/Routeによるアプリケーションの公開
 
 OpenShift上に展開された仮想マシンは、デフォルトで、OpenShiftのデフォルトのCNIである`OVN-Kubernetes`により自動的に払い出されたPodネットワークを`Primary Network`としてアタッチされます。
@@ -459,10 +459,10 @@ Primary Networkでは、同一のOpenShiftクラスタ内の仮想マシンや�
 
 また、OpenShiftでは、`Route`と呼ばれるHA proxyベースのL7ロードバランサが提供されます。仮想マシン上の特定のサービスへ80/443で接続したい場合は、その他のPodと同様、Routeを経由して接続できます。
 
-ここでは、本トピックの一番最初に作成したCentOSの仮想マシンへ`nginx`をインストールし、*Service* と *Route* を使用してアクセスできることを確認します。
+ここでは、本章の一番最初に作成したCentOSの仮想マシンへ`nginx`をインストールし、*Service* と *Route* を使用してアクセスできることを確認します。
 
 ### 仮想マシンへnginxのインストール
-本トピックで作成した`centos-stream9-hello-handson`の `[Console]`を開きます。
+本章で作成した`centos-stream9-hello-handson`の `[Console]`を開きます。
 
 ![](images/2-vm-create/quick-create-vm3.png)
 
@@ -560,7 +560,7 @@ nginxサービスへ外部からアクセスできるようには *Route* を使
 
 
 ## 5. ライブマイグレーション
-本トピックの最後に、仮想マシンのライブマイグレーションを試してみましょう。
+本章の最後に、仮想マシンのライブマイグレーションを試してみましょう。
 `VirtualMachines`メニューを開き、作成済みの`centos-stream9-hello-handson`という名前のVMの詳細画面を開きます。
 
 
