@@ -559,7 +559,7 @@ nginxサービスへ外部からアクセスできるようには *Route* を使
 ![](images/2-vm-create/route-4.png)
 
 
-## 5. ライブマイグレーション
+## ライブマイグレーション
 本章の最後に、仮想マシンのライブマイグレーションを試してみましょう。
 `VirtualMachines`メニューを開き、作成済みの`centos-stream9-hello-handson`という名前のVMの詳細画面を開きます。
 
