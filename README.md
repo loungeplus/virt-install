@@ -7,7 +7,7 @@
 - 踏み台サーバのホスト名、ユーザ名、パスワード
 - AWSの`ACCESS KEY`と`SECRET ACCESS KEY`
 
-また、自分自身で事前に用意しておく必要のある情報です。
+また、以下の[Pull Secret](https://console.redhat.com/openshift/downloads#tool-pull-secret)を自分自身で事前に用意しておく必要があります。
 
 - [Pull Secret](https://console.redhat.com/openshift/downloads#tool-pull-secret)
     - Red Hat Hybrid Cloud Consoleからダウンロード
