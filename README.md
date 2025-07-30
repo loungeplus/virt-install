@@ -13,7 +13,7 @@
     - Red Hat Hybrid Cloud Consoleからダウンロード
     - Red Hat Accountを作成する必要があります。(無償)
 
-![alt text](images/1-top/pullsecret.png)
+![alt text](images/0-top/pullsecret.png)
 
 ## [1章. OpenShift Virtualizationのインストール](1-install.md) 
 ## [2章. 仮想マシンの作成](2-vm-create.md) 
