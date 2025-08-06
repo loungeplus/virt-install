@@ -25,7 +25,7 @@ OpenShift Virtualizationは、この要件に対し、*Secondary Network*　と�
 
 Kubernetes NMState Operator は、クラスタノード上のさまざまなネットワークインターフェースタイプ、DNS、ルーティングを構成するための機能を提供します。さらに、クラスターノード上のデーモンが、各ノードのネットワークインターフェースの状態を定期的にAPIサーバーに報告します。
 
-本ハンズオン環境には、NMState Operatorがインストールされています。そのため、まずは、NMState Operatorをインストールすることから始めましょう。
+本ハンズオン環境には、NMState Operatorがインストールされておりません。そのため、まずは、NMState Operatorをインストールすることから始めましょう。
 
 `[管理者向け表示]` > `[Operator]` > `[OperatorHub]`を開き、検索ボックスへ `NMState`と入力します。
 
@@ -51,7 +51,7 @@ Kubernetes NMState Operator は、クラスタノード上のさまざまなネ�
 ![alt text](images/3-networking/install-nmstate-operator-5.png)
 
 
-左側のメニューで `[Virtualzation]` > `Networking` をクリックし、次に `NodeNetworkState` > `[Expand all]` をクリックして現在のノード上のネットワーク構成を確認します。
+左側のメニューで `[Virtualization]`画面へ切り替えて `[ネットワーク]` をクリックし、次に `NodeNetworkState` > `[Expand all]` をクリックして現在のノード上のネットワーク構成を確認します。
 
 ![alt text](images/3-networking/01_NodeNetworkState_List.png)
 
@@ -113,7 +113,7 @@ VMでLinuxブリッジを使用するには、*Network Attachment Definition* �
 
 *Network Attachment Definition* はプロジェクトに紐づいており、そのプロジェクトにデプロイされた仮想マシンだけがアクセスできます。 Network Attachment Definitionがデフォルトのプロジェクトに作成された場合、グローバルに利用可能になります。 これにより、管理者は、VMを管理するアクセス権を持つ特定のユーザーに対して、どのネットワークを利用可能にするか、または利用不可能にするかを制御することができます。
 
-左側のメニューから `[ネットワーク]` > `[Network Attachment Definition]` の順に選択します。
+左側のメニューで `[Virtualization]`画面へ切り替えて `[ネットワーク]` > `[Network Attachment Definition]` の順に選択します。
 
 そして、`handson` プロジェクトへ切り替えた上で、`[Create Network Attachment Definition]` をクリックします。
 
@@ -122,6 +122,8 @@ VMでLinuxブリッジを使用するには、*Network Attachment Definition* �
 * *Name*: nad-br0
 * *ネットワークタイプ*: Linux Bridge
 * *ブリッジ名*: br0
+
+作成済みの仮想マシン `centos-stream9-hello-handson` に2つ目のネットワーク インターフェイスを追加し、br0 のネットワークに接続します。
 
 ![alt text](images/3-networking/configure-nad-1.png)
 
@@ -132,6 +134,8 @@ VMでLinuxブリッジを使用するには、*Network Attachment Definition* �
 > NOTE. ホスト上の単一のLinuxブリッジには、多くの異なるVLANを関連付けることができます。このシナリオでは、個々のNetwork Attachment Definitionを作成するだけでよく、個別のホストインターフェースやブリッジを作成する必要はありません。
 
 ## 仮想マシンをネットワークに接続
+作成済みの仮想マシン `centos-stream9-hello-handson` に2つ目のネットワーク インターフェイスを追加し、br0 のネットワークに接続します。
+
 左側のメニューで `[Virtualization]`画面へ切り替えて、`[VirtualMachines]` に移動し、中央の列から *centos-stream9-hello-handson* VM を選択します。 `[Configuration]` タブをクリックし、左側の `[Network]` タブをクリックします。
 
 ![alt text](images/3-networking/configure-nad-2.png)
@@ -261,7 +265,7 @@ UserDefinedNetworkに接続された仮想マシンを作成するには、 [YAM
 
 このハンズオンでは作業を簡単にするため、以下のYAML定義を使用し、UserDefinedNetworkに接続されたVMを作成します。
 
-次の画像のように、トップメニューを使用してYAMLをインポートできます。
+次の画像のように、トップメニューの `+` を押下して`[YAMLのインポート]` を選択することで、YAMLをインポートできます。
 
 ![alt text](images/3-networking/udn-5.png)
 
