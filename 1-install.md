@@ -23,23 +23,22 @@ OpenShiftの[インストール](https://docs.redhat.com/en/documentation/opensh
 提供された踏み台サーバにSSHでアクセスします。
 `<foo>.<bar>`の箇所は、講師の指示に従ってください。
 
+```
+ssh lab-user@bastion.<foo>.<bar>.opentlc.com
+```
+
+最初に既存の `.kube` ディレクトリを削除します。
 
 ```
-$ ssh lab-user@bastion.<foo>.<bar>.opentlc.com
-```
-
-最初に既存の `.kube` を削除します。
-
-```
-[lab-user@bastion ~]$ rm -r .kube
+rm -r .kube
 ```
 
 ### install-config.yamlの作成
 
-OpenShiftの構成を記述した `install-config.yaml` を作成します。
+OpenShiftのインストール構成を記述した `install-config.yaml` を作成します。
 
 ```
-[lab-user@bastion ~]$ vi install-config.yaml
+vi install-config.yaml
 ```
 
 適宜、`YOUR_PULL_SECRET`、`sandboxXXX` を書き換えてください。
@@ -47,7 +46,7 @@ OpenShiftの構成を記述した `install-config.yaml` を作成します。
 
 ```
 apiVersion: v1
-baseDomain: sandboxXXX.opentlc.com
+baseDomain: sandboxXXX.opentlc.com # ここを書き換えます
 compute:
 - architecture: amd64
   hyperthreading: Enabled
@@ -78,20 +77,25 @@ platform:
   aws:
     region: ap-northeast-1
 publish: External
-pullSecret: 'YOUR_PULL_SECRET'
+pullSecret: 'YOUR_PULL_SECRET' # ここを書き換えます
 ```
 
 ## OpenShiftをIPIでインストール
 
 `install-config.yaml` を作成したら、`config` ディレクトリを作成し、そのディレクトリ配下へinstall-config.yamlを移動します。
-そして、`openshift-install` コマンドを実行し、OpenShiftのインストールを開始します。
 
+```
+mkdir config
+mv install-config.yaml config
+```
+
+そして、`openshift-install` コマンドを実行し、OpenShiftのインストールを開始します。
 また、途中でAWSの `ACCESS_KEY` と `SECRET_ACCESS_KEY` の入力を求められますので、講師に案内された各自の環境に合わせた情報を入力してください。
 
 ```
-[lab-user@bastion ~]$ mkdir config
-[lab-user@bastion ~]$ mv install-config.yaml config
-[lab-user@bastion ~]$ openshift-install create cluster --dir=./config
+openshift-install create cluster --dir=./config
+```
+```
 ? AWS Access Key ID xxx
 ? AWS Secret Access Key [? for help] ****************************************
 ...
@@ -120,13 +124,15 @@ OpenShiftは、Kubernetesの標準サービスの他、認証・認可やノー�
 
 最初に、インストーラが生成した`kubeconfig`のパスを、`KUBECONFIG`環境変数に指定します。
 ```
-[lab-user@bastion ~]$ export KUBECONFIG=/home/lab-user/config/auth/kubeconfig
+export KUBECONFIG=/home/lab-user/config/auth/kubeconfig
 ```
 
 そして、以下のコマンドを実行してください。
 
 ```
-[lab-user@bastion ~]$ oc get co
+oc get co
+```
+```
 NAME                                       VERSION   AVAILABLE   PROGRESSING   DEGRADED   SINCE   MESSAGE
 authentication                             4.18.19   True        False         False      10m     
 baremetal                                  4.18.19   True        False         False      28m     
@@ -171,7 +177,9 @@ storage                                    4.18.19   True        False         F
 見失ってしまった方は、以下のコマンドを実行すれば、実行ログを出力できます。
 
 ```
-[lab-user@bastion ~]$ cat config/.openshift_install.log
+cat config/.openshift_install.log
+```
+```
 ...
 time="2025-07-15T09:32:05Z" level=info msg="Access the OpenShift web-console here: https://console-openshift-console.apps.demo.sandboxXXX.opentlc.com"
 time="2025-07-15T09:32:05Z" level=info msg="Login to the console with user: \"kubeadmin\", and password: \"************\""
@@ -182,7 +190,7 @@ OpenShiftは、デフォルトで自己証明書を使用しているため、�
 
 ![Console Login1](images/1-install/console-login1.png)
 
-`[詳細設定]`を押下し、`oauth-openshift.apps....にアクセスする（安全ではありません）`のリンクを開きます。
+`[詳細設定]`を押下し、`[oauth-openshift.apps....にアクセスする（安全ではありません）]`のリンクを開きます。
 
 ![Console Login2](images/1-install/console-login2.png)
 
@@ -190,7 +198,7 @@ OpenShiftは、デフォルトで自己証明書を使用しているため、�
 
 ![Console Login3](images/1-install/console-login3.png)
 
-ユーザ名とパスワードの欄に、`openshift-install`コマンドの実行ログに出力されている `console with user: "kubeadmin"`と、 `password: "<Passowrd>" `を入力し、`[ログイン]`ボタンを押下します。
+ユーザ名とパスワードの欄に、`openshift-install`コマンドの実行ログに出力されている `「console with user: "kubeadmin"」`と、 `「password: "<Password>"」`を入力し、`[ログイン]`ボタンを押下します。
 
 以下のように、OpenShiftコンソールが表示されることを確認してください。
 
@@ -209,7 +217,7 @@ OpenShiftでは、`User`と`Group`の単位で、クラスタへアクセスす�
 
 ![oclogin1](images/1-install/oclogin1.png)
 
-続いて、「ログインコマンドのコピー」というメニューをクリックします。
+続いて、`[ログインコマンドのコピー]`というメニューをクリックします。
 ![oclogin2](images/1-install/oclogin2.png)
 
 
@@ -217,16 +225,17 @@ OpenShiftでは、`User`と`Group`の単位で、クラスタへアクセスす�
 
 ![oclogin3](images/1-install/oclogin3.png)
 
-すると、「Log in with this token」という箇所に、`oc login`のコマンドが表示されます。
+すると、`「Log in with this token」` という箇所に、`oc login`のコマンドが表示されます。
 
 ![oclogin4](images/1-install/oclogin4.png)
 
 このコマンドをコピーして、踏み台サーバ上で実行してみましょう。
 
-初回ログイン時は、`Use insecure connections? (y/n): `と表示されるので、`y`を入力してEnterを押下してください。
+初回ログイン時は、`「Use insecure connections? (y/n):」`と表示されるので、`[y]`を入力してEnterを押下してください。
 
 ```
-[lab-user@bastion ~]$ oc login --token=*** --server=https://api.demo.sandboxXXX.opentlc.com:6443
+実行コマンド例：
+oc login --token=*** --server=https://api.demo.sandboxXXX.opentlc.com:6443 ※XXXは各環境により異なります
 ...
 Using project "default".
 ```
@@ -239,20 +248,20 @@ Using project "default".
 まず、OpenShiftクラスタの識別子を特定してください。
 
 ```
-[lab-user@bastion ~]$ export infrastructure_ID=$(oc get machineset -A | grep worker-ap-northeast-1a | awk '{print $2}' | sed 's/-worker.*//')
+export infrastructure_ID=$(oc get machineset -A | grep worker-ap-northeast-1a | awk '{print $2}' | sed 's/-worker.*//')
 ```
 
 そして、AWSのOpenShiftのホストOSであるRed Hat Enterprise Linux CoreOS(RHCOS)の、AMI IDを特定します。
 
 ```
-[lab-user@bastion ~]$ export ami_id=$(oc get configmap/coreos-bootimages -n openshift-machine-config-operator -o jsonpath='{.data.stream}' | jq -r '.architectures.x86_64.images.aws.regions."ap-northeast-1".image')
+export ami_id=$(oc get configmap/coreos-bootimages -n openshift-machine-config-operator -o jsonpath='{.data.stream}' | jq -r '.architectures.x86_64.images.aws.regions."ap-northeast-1".image')
 ```
 
 OpenShiftでは、新規ノード追加を`MachineSet`というAPIで自動化します。
-MachineSetのマニフェストを作成します。
+`MachineSet`のマニフェストを作成します。
 
-```nocopy
-[lab-user@bastion ~]$ vi machine-bm.yaml
+```
+vi machine-bm.yaml
 ```
 
 ```
@@ -334,13 +343,15 @@ spec:
 なお、環境変数 `infrastructure_ID`と`ami_id`を `envsubst`で展開する形でapplyしましょう。
 
 ```
-[lab-user@bastion ~]$ cat machine-bm.yaml | envsubst | oc apply -f -
+cat machine-bm.yaml | envsubst | oc apply -f -
 ```
 
 `oc get machineset`コマンドを実行すると、`${infrastructure_id}-bm-worker-ap-northeast-1a`という名前で、MachineSetが追加されたことを確認できます。
 
 ```
-[lab-user@bastion ~]$ oc get machineset -A
+oc get machineset -A
+```
+```
 NAMESPACE               NAME                                   DESIRED   CURRENT   READY   AVAILABLE   AGE
 openshift-machine-api   demo-97sfb-bm-worker-ap-northeast-1a   2         2         2       2           23m
 openshift-machine-api   demo-97sfb-worker-ap-northeast-1a      1         1         1       1           62m
@@ -360,58 +371,58 @@ ODFは、rook/cephベースのコンテナストレージです。OpenShift Plat
 
 ### OpenShift Data Foundation Operatorのインストール
 
-`[管理者向け表示]`の画面で、`[Operator]` > `[OperatorHub]`をクリックします。そして、検索ボックスに「OpenShift Data Foundation」と入力してください。
+`[管理者向け表示]`の画面で、`[Operator]` > `[OperatorHub]`をクリックします。そして、検索ボックスに `[OpenShift Data Foundation]` と入力してください。
 
 ![ODF Install1](images/1-install/operator-odf-select.png)
 
-真ん中の「OpenShift Data Foundation」のタイルをクリックすると、Operatorの紹介画面が表示されます。何も考えず`[インストール]`ボタンを押下しましょう。
+真ん中の `[OpenShift Data Foundation]` のタイルをクリックすると、Operatorの紹介画面が表示されます。何も考えず `[インストール]` ボタンを押下しましょう。
 
 ![ODF Install2](images/1-install/odf-install-page.png)
 
 続いて、`[Operatorのインストール]`画面が表示されます。
-デフォルトの設定のまま、「インストール」ボタンを押下してください。
+デフォルトの設定のまま、`[インストール]` ボタンを押下してください。
 
 ![ODF Install3](images/1-install/odf-install1.png)
 
-`[Operator]` > `[インストール済みのOperator]`画面で、「OpenShift Data Foundation」および「OpenShift Data Foundation Client」のステータスが「✅Succeed」であることを確認します。
+`[Operator]` > `[インストール済みのOperator]` 画面で、「OpenShift Data Foundation」および「OpenShift Data Foundation Client」のステータスが「✅Succeed」であることを確認します。
 
 ![ODF Install4](images/1-install/operator-installed.png)
 
-`[インストール済みのOperator]`画面で、`[OpenShift Data Foundation]`をクリックします。すると、`StorageSystemの作成`というボタンが表示されているはずです。ボタンを押下しましょう。
+`[インストール済みのOperator]`画面で、`[OpenShift Data Foundation]`をクリックします。すると、`[StorageSystemの作成]` というボタンが表示されているはずです。ボタンを押下しましょう。
 
 ![ODF Install5](images/1-install/storagesystem1.png)
 
 ### StorageSystemリソースの作成
 
-以下の画面の通り、設定を選択してStorageSystemを作成してください。
+以下の画面の通り、設定を選択して `StorageSystem`を作成してください。
 
 #### 「バッキングストレージ」の設定
 ![storagesystem1](images/1-install/storagesystem2.png)
 
-- Deploymentタイプ：完全なデプロイメント
-- バッキングストレージのタイプ：既存のStorageClassの使用
-- ネットワークファイルシステム(NFS)：✅
-- Ceph RBDをデフォルトのStorageClassとして使用する：✅
+- Deploymentタイプ：`完全なデプロイメント`
+- バッキングストレージのタイプ：`既存のStorageClassの使用`
+- ネットワークファイルシステム(NFS)：`✅`
+- Ceph RBDをデフォルトのStorageClassとして使用する：`✅`
 
-`[次へ]`ボタンを押下
+`[次へ]`ボタンを押下します。
 
 #### 「容量およびノード」の設定
 ![storagesystem2](images/1-install/storagesystem3.png) 
 
-- 要求された容量：2TB
-- ノードの選択：3つのノードを✅ (CPU 16 Coreの3ノード)
+- 要求された容量：`2TB`
+- ノードの選択：`3つのノードを✅` (CPU 16 Coreの3ノード)
 
-その他の設定はデフォルトのまま `[次へ]`ボタンを押下
+その他の設定はデフォルトのまま `[次へ]`ボタンを押下します。
 
 #### 「セキュリティおよびネットワーク」の設定
 
-デフォルトのまま`[次へ]`
+デフォルトのまま`[次へ]`を押下します。
 
 ![storagesystem3](images/1-install/storagesystem4.png) 
 
 #### 確認および作成
 
-`[StorageSystemの作成]`ボタンを押下
+`[StorageSystemの作成]`ボタンを押下します。
 
 ODFのインストールには十分程度時間がかかるため、次のステップへ進んでください。
 
@@ -424,7 +435,9 @@ ODFのインストールには十分程度時間がかかるため、次のス�
 念の為、Podの状態が以下の通りになることも確認しておきましょう！
 
 ```
-[lab-user@bastion ~]$ oc get po -n openshift-storage                                                                              (base) 
+oc get po -n openshift-storage                                                                              (base) 
+```
+```
 NAME                                                              READY   STATUS      RESTARTS   AGE
 ceph-csi-controller-manager-6c9dd5975b-8qhqw                      2/2     Running     0          46h
 csi-addons-controller-manager-85858865c7-2klk4                    2/2     Running     0          46h
@@ -501,7 +514,7 @@ ux-backend-server-68b88df999-bb9mv                                2/2     Runnin
     storageclass.kubernetes.io/is-default-class: 'true'
 ```
 
-再度、`[StorageClass]`を開き、`gp3-csi`の横の「デフォルト」という文字列が消えていることを確認します。
+再度、`[StorageClass]`を開き、`gp3-csi`の横の `「デフォルト」`という文字列が消えていることを確認します。
 
 ![storageclass3](images/1-install/storageclass3.png)
 
@@ -510,16 +523,18 @@ ux-backend-server-68b88df999-bb9mv                                2/2     Runnin
 いよいよ本題のOpenShift Virtualizationのインストールに進みましょう！
 
 インストールを進める前に、ノードの状態を確認しておきます。
-以下の通り、ROLES列似て、
-- `control-plane,master`: 3台
-- `worker`: 5台
+以下の通り、ROLES列で、
+- `control-plane,master`: `3台`
+- `worker`: `5台`
 
 の`STATUS`列が、全て`Ready`であることを確認しましょう。
 
 > Note. 本ハンズオン環境は、デフォルトで、Master 3台、Worker 3台が払い出されています。ベアメタルインスタンスを2台追加したため、OpenShift Virtualizationをインストールする時点では、Workerが5台であることを確認しておきましょう。
 
 ```
-[lab-user@bastion ~]$ oc get nodes
+oc get nodes
+```
+```
 NAME                                             STATUS   ROLES                  AGE   VERSION
 ip-10-0-0-62.ap-northeast-1.compute.internal     Ready    control-plane,master   49m   v1.31.10
 ip-10-0-12-161.ap-northeast-1.compute.internal   Ready    worker                 37m   v1.31.10
@@ -532,7 +547,7 @@ ip-10-0-76-34.ap-northeast-1.compute.internal    Ready    control-plane,master  
 ```
 
 ### OpenShift Virtualization Operatorのインストール
-`[Operator]` > `[OperatorHub]`を開き、検索ボックスへ「OpenShift Virtualization」と入力します。
+`[Operator]` > `[OperatorHub]`を開き、検索ボックスへ `OpenShift Virtualization` と入力します。
 
 そして、`[OpenShift Virtualization]`タイルをクリックしてください。
 
@@ -546,16 +561,16 @@ ODFの時と同様、Operatorの紹介画面が開きます。何も考えず`[�
 
 ![virtinstall3](images/1-install/virt-install1.png)
 
-`[インストール済みのOperator]`画面で、「OpenShift Virtualization」をクリックします。
+`[インストール済みのOperator]`画面で、`[OpenShift Virtualization]` をクリックします。
 
 ![virtinstall3](images/1-install/operator-installed.png)
 
-すると、`[HyperConvergedの作成]`ボタンが表示されているはずです。
+すると、`[HyperConvergedの作成]` ボタンが表示されているはずです。
 ボタンをクリックし、デフォルトの設定のまま`[作成]`ボタンを押下してください。
 
 ![virtinstall4](images/1-install/hyperconverged.png)
 
-> Note. インストール中に、画面のリロードを求められますので、リロードしてください。OpenShift Virtualizationがインストールされると、OpenShiftコンソールの`[管理者向け表示]`のメニューに、`[Virtualization]`というOpenShift Virtualizationのメニューが追加されます。
+> Note. インストール中に、画面のリロードを求められますので、リロードしてください。OpenShift Virtualizationがインストールされると、OpenShiftコンソールの`[管理者向け表示]`のメニューに、`[Virtualization]`という`「OpenShift Virtualizationのメニュー」`が追加されます。
 
 なお、`[インストール済みのOperator]` > `[OpenShift Virtualization]` > `[OpenShift Virtualization Deloyment]` > `[kubevirt-hyperconverged]`のページの一番下が、以下の状態となれば、正常にインストールされています。
 
@@ -564,7 +579,9 @@ ODFの時と同様、Operatorの紹介画面が開きます。何も考えず`[�
 また、念の為、CLIでPodの状態が以下の通りであることを確認しましょう。
 
 ```
-[lab-user@bastion ~]$ oc get po -n openshift-cnv                                                
+oc get po -n openshift-cnv
+```
+```
 NAME                                                   READY   STATUS    RESTARTS      AGE
 aaq-operator-6bb68fd74b-thldw                          1/1     Running   0             46h
 bridge-marker-5vmjl                                    1/1     Running   0             46h
