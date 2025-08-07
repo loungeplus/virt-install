@@ -109,10 +109,10 @@ INFO Time elapsed: 42m51s
 インストール完了まで40-50分程度かかるため、気長に待ちましょう。
 
 ### インストール完了を確認
-`openshift-install`コマンドの実行ログに、`INFO Install complete! `が出力されたら、インストールが無事完了です。
+`openshift-install`コマンドの実行ログに、`「INFO Install complete!」` が出力されたら、インストールが無事完了です。
 
 OpenShiftは、Kubernetesの標準サービスの他、認証・認可やノード管理、バージョン管理など、クラスタ運用に必要な様々なKubernetes Operatorが稼働しています。
-このOpenShift標準サービスを`Cluster Operator`と呼びます。
+このOpenShift標準サービスを`「Cluster Operator」`と呼びます。
 
 念の為、`Cluster Operator`の状態を確認してみましょう。
 
