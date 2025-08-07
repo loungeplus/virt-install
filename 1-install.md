@@ -399,7 +399,7 @@ ODFは、rook/cephベースのコンテナストレージです。OpenShift Plat
 ![storagesystem2](images/1-install/storagesystem3.png) 
 
 - 要求された容量：2TB
-- ノードの選択：すべてのノードを✅
+- ノードの選択：3つのノードを✅ (CPU 16 Coreの3ノード)
 
 その他の設定はデフォルトのまま `[次へ]`ボタンを押下
 
