@@ -24,7 +24,7 @@ OpenShiftの[インストール](https://docs.redhat.com/en/documentation/opensh
 `<foo>.<bar>`の箇所は、講師の指示に従ってください。
 
 
-```{.no-copy}
+```
 $ ssh lab-user@bastion.<foo>.<bar>.opentlc.com
 ```
 
