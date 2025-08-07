@@ -28,6 +28,12 @@ OpenShiftの[インストール](https://docs.redhat.com/en/documentation/opensh
 $ ssh lab-user@bastion.<foo>.<bar>.opentlc.com
 ```
 
+最初に既存の `.kube` を削除します。
+
+```
+[lab-user@bastion ~]$ rm -r .kube
+```
+
 ### install-config.yamlの作成
 
 OpenShiftの構成を記述した `install-config.yaml` を作成します。
