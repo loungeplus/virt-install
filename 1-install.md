@@ -251,7 +251,7 @@ Using project "default".
 OpenShiftでは、新規ノード追加を`MachineSet`というAPIで自動化します。
 MachineSetのマニフェストを作成します。
 
-```
+```nocopy
 [lab-user@bastion ~]$ vi machine-bm.yaml
 ```
 
